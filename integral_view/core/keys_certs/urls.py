@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.keys_certs.views.keys_certs_management import view_ssl_certificates, delete_ssl_certificate, create_self_signed_ssl_certificate, upload_ssl_certificate, view_known_hosts_ssh_keys, view_user_ssh_keys, upload_ssh_user_key, upload_ssh_host_key

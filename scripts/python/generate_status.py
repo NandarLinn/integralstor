@@ -36,7 +36,7 @@ def gen_status(path, lg=None):
         # Now move the tmp to the actual manifest file name
         # print 'fullpath is ', fullpath
         shutil.move(fulltmppath, fullpath)
-    except Exception, e:
+    except Exception as e:
         logger.log_or_print('Error generating status : %s' %
                             e, lg, level='critical')
         lock.release_lock('generate_status')
@@ -87,7 +87,7 @@ def main():
         if err:
             raise Exception(err)
         # print rc
-    except Exception, e:
+    except Exception as e:
         str = "Error generating status file : %s" % e
         logger.log_or_print(str, lg, level='critical')
         sys.exit(-1)

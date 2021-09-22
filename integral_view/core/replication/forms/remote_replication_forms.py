@@ -37,7 +37,7 @@ class RsyncMode(forms.Form):
                 initial = kwargs.pop('initial')
         super(RsyncMode, self).__init__(*args, **kwargs)
         if switches:
-            for switch, val in switches.items():
+            for switch, val in list(switches.items()):
                 switch_ch.append(
                     ({switch: switches[switch]}, val['description']))
                 if val['is_arg'] == True:

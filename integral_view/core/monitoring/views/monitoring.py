@@ -22,7 +22,7 @@ def view_alerts(request):
         ret, err = alerts.update_last_view_time(request)
         return_dict['alerts_list'] = alerts_list
         return django.shortcuts.render_to_response('view_alerts.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["page_title"] = 'System alerts'
         return_dict['tab'] = 'view_logs_tab'
@@ -44,7 +44,7 @@ def refresh_alerts(request, random=None):
             clss = "btn btn-default btn-sm"
             message = "View alerts"
             return django.http.HttpResponse("No New Alerts")
-    except Exception, e:
+    except Exception as e:
         return django.http.HttpResponse("Error loading alerts : %s" % str(e))
 
 def view_remote_monitoring_servers(request):
@@ -61,7 +61,7 @@ def view_remote_monitoring_servers(request):
             raise Exception(err)
         return_dict['servers'] = servers
         return django.shortcuts.render_to_response("view_remote_monitoring_servers.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Remote server monitoring'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error loading remote monitoring server list'
@@ -84,7 +84,7 @@ def update_remote_monitoring_server(request):
             initial = {}
             if 'ip' in req_ret:
                 ip = req_ret['ip']
-                if ip in servers.keys():
+                if ip in list(servers.keys()):
                     initial['ip'] = ip
                     initial['name'] = servers[ip]['name']
                 return_dict['action'] = 'update'
@@ -114,7 +114,7 @@ def update_remote_monitoring_server(request):
             else:
                 # invalid form
                 return django.shortcuts.render_to_response("update_remote_monitoring_server.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Update remote server monitoring server'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error updating remote monitoring server'
@@ -136,7 +136,7 @@ def delete_remote_monitoring_server(request):
         servers, err = remote_monitoring.get_servers()
         if err:
             raise Exception(err)
-        if ip not in servers.keys():
+        if ip not in list(servers.keys()):
             raise Exception(
                 'Specified server is currently not being remote monitored.')
         name = servers[ip]['name']
@@ -148,7 +148,7 @@ def delete_remote_monitoring_server(request):
         audit.audit("delete_remote_monitoring_server", audit_str, request)
         return django.http.HttpResponseRedirect('/monitoring/view_remote_monitoring_servers?ack=deleted')
 
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Remove remote server monitoring server'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error removing remote monitoring server'
@@ -169,11 +169,11 @@ def view_remote_monitoring_server_status(request):
         status, err = remote_monitoring.get_status(req_ret['ip'])
         if err:
             raise Exception(err)
-        print status
+        print(status)
         return_dict['status'] = status
         return django.shortcuts.render_to_response("view_remote_monitoring_server_status.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'View remote server monitoring server status'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error viewing remote monitoring server status'
@@ -190,7 +190,7 @@ def api_get_status(request):
         # print si
         if err:
             raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         return JsonResponse({'error': str(e)})
         # return django.http.HttpResponse({'error': str(e)}
@@ -264,7 +264,7 @@ def view_read_write_stats(request):
         if err:
             raise Exception(err)
         return django.shortcuts.render_to_response('view_read_write_stats.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["page_title"] = 'Monitoring'
         return_dict['tab'] = 'dir_manager_tab'
@@ -323,7 +323,7 @@ def view_dashboard(request, page = None):
         num_smart_ctrl_disks = 0
         num_disks = len(si['disks'])
         disks_ok = True
-        for sn, disk in si['disks'].items():
+        for sn, disk in list(si['disks'].items()):
             if 'status' in disk:
                 if 'hw_raid' in disk:
                     if not disk['hw_raid']:
@@ -375,7 +375,7 @@ def view_dashboard(request, page = None):
         services_ok = True
 
         if services_dict:
-            for service, service_d in services_dict.items():
+            for service, service_d in list(services_dict.items()):
                 if service_d["info"]["status"]["status_str"] == "Active":
                     num_active_services += 1
                 elif service_d["info"]["status"]["status_str"] == "Inactive":
@@ -454,7 +454,7 @@ def view_dashboard(request, page = None):
                 raise Exception(err)
             value_dict = {}
             if cpu:
-                for key in cpu.keys():
+                for key in list(cpu.keys()):
                     value_list = []
                     time_list = []
                     if key == "date":
@@ -472,7 +472,7 @@ def view_dashboard(request, page = None):
                 raise Exception(err)
             value_dict = {}
             if queue:
-                for key in queue.keys():
+                for key in list(queue.keys()):
                     value_list = []
                     time_list = []
                     if key == "date":
@@ -525,7 +525,7 @@ def view_dashboard(request, page = None):
                 raise Exception(err)
             value_dict = {}
             if network:
-                for key in network.keys():
+                for key in list(network.keys()):
                     value_list = []
                     time_list = []
                     if key == "date" or key == "lo":
@@ -542,7 +542,7 @@ def view_dashboard(request, page = None):
         return_dict["labels"] = time_list
         return_dict["data"] = value_list
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
         return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))

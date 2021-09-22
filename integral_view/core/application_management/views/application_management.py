@@ -20,7 +20,7 @@ def view_applications(request):
 
         return_dict["applications"] = applications
         return django.shortcuts.render_to_response("view_applications.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "application_management_base.html"
         return_dict["page_title"] = 'Installed applications'
         return_dict['tab'] = 'view_applications_tab'
@@ -41,7 +41,7 @@ def launch_application(request):
             raise Exception(err)
         if 'app_tag' not in req_params:
             raise Exception("Invalid request, please use the menus.")
-        if req_params['app_tag'] not in applications.keys():
+        if req_params['app_tag'] not in list(applications.keys()):
             raise Exception("Invalid application, please use the menus.")
         application = applications[req_params['app_tag']]
         
@@ -72,8 +72,8 @@ def launch_application(request):
         return_dict["application"] = application
         return_dict["url"] = url
         return django.shortcuts.render_to_response("application_launcher.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
-        print 'exception', e
+    except Exception as e:
+        print(('exception', e))
         return_dict['base_template'] = "application_management_base.html"
         return_dict["page_title"] = 'Application'
         return_dict['tab'] = 'applications_tab'

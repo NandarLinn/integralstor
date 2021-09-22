@@ -23,7 +23,7 @@ applications, err = config.get_applications_config()
 application_template_dirs = []
 application_static_dirs = []
 if applications:
-    for base_dir, app in applications.items():
+    for base_dir, app in list(applications.items()):
         application_template_dirs.append('%s/integral_view/applications/%s/templates'%(platform_root, base_dir))
         application_static_dirs.append('%s/integral_view/static/%s'%(platform_root, base_dir))
 
@@ -65,12 +65,11 @@ INSTALLED_APPS = (
     'integral_view',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',

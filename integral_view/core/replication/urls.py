@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.replication.views.remote_replication_management import create_remote_replication, view_remote_replications, delete_remote_replication, update_remote_replication, update_rsync_remote_replication_pause_schedule, update_remote_replication_user_comment

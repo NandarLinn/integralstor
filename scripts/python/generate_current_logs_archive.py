@@ -57,7 +57,7 @@ def main():
                 zf.write(os.path.join(root, file), '%s/%s' %
                          (root[len('/var/log/integralstor/'):], file))
         zf.close()
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('generate_current_logs_archive')
         logger.log_or_print('Error generating current logs archive : %s' %

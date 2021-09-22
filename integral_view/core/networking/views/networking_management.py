@@ -42,7 +42,7 @@ def view_interfaces(request):
         return_dict["bonds"] = bonds
         template = "view_interfaces.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network interfaces'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -89,7 +89,7 @@ def view_interface(request):
 
         template = "view_interface.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network interface details'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -126,7 +126,7 @@ def delete_interface_connection(request):
                 name)
             audit.audit("delete_interfaces_connection", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=reset')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Reset address configuration'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -166,7 +166,7 @@ def update_interface_state(request):
                 name, state)
             audit.audit("set_interface_state", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=state_%s' % state)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Set interface state'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -206,7 +206,7 @@ def view_bond(request):
 
         template = "view_bond.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network bond details'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -280,7 +280,7 @@ def update_interface_address(request):
                 audit_str += ', default gateway : %s' % ip['default_gateway']
             audit.audit("edit_interface_address", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interface?name=%s&result=addr_changed' % (name))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Modify network interface addressing'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -310,7 +310,7 @@ def create_vlan(request):
         return_dict['interfaces'] = interfaces
         if_list = []
         existing_vlans = []
-        for if_name, iface in interfaces.items():
+        for if_name, iface in list(interfaces.items()):
             if '.' in if_name:
                 comps = if_name.split('.')
                 if len(comps) != 2:
@@ -347,7 +347,7 @@ def create_vlan(request):
                 cd['vlan_id'], cd['base_interface'])
             audit.audit("create_vlan", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=created_vlan')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Create a network VLAN'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -386,7 +386,7 @@ def delete_vlan(request):
             audit_str = "Removed VLAN %s" % (name)
             audit.audit("remove_vlan", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=removed_vlan')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Remove a VLAN'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -416,7 +416,7 @@ def create_bond(request):
         return_dict['interfaces'] = interfaces
         iface_list = []
         existing_bonds = []
-        for if_name, iface in interfaces.items():
+        for if_name, iface in list(interfaces.items()):
             if if_name.startswith('lo') or if_name in bid['by_slave']:
                 continue
             if if_name in bm:
@@ -440,7 +440,7 @@ def create_bond(request):
             if not form.is_valid():
                 return django.shortcuts.render_to_response("create_bond.html", return_dict, context_instance=django.template.context.RequestContext(request))
             cd = form.cleaned_data
-            print cd
+            print(cd)
             result, err = networking.create_bond(
                 cd['name'], cd['slaves'], int(cd['mode']))
             if not result:
@@ -472,7 +472,7 @@ def create_bond(request):
                 cd['name'], ','.join(cd['slaves']))
             audit.audit("create_bond", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=created_bond')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Create a network interface bond'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -528,7 +528,7 @@ def delete_bond(request):
             audit_str = "Removed network bond %s" % (name)
             audit.audit("remove_bond", audit_str, request)
             return django.http.HttpResponseRedirect('/networking/view_interfaces?ack=removed_bond')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Remove a network interface bond'
         return_dict['tab'] = 'view_interfaces_tab'
@@ -556,7 +556,7 @@ def view_hostname(request):
             return_dict['hostname'] = hostname
             template = "view_hostname.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View system hostname'
         return_dict['tab'] = 'view_hostname_tab'
@@ -634,7 +634,7 @@ def update_hostname(request):
                 raise Exception(err)
 
             return django.http.HttpResponseRedirect('/networking/view_hostname?result=saved')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Modify system hostname'
         return_dict['tab'] = 'view_hostname_tab'
@@ -656,7 +656,7 @@ def view_dns_nameservers(request):
         return_dict['name_servers'] = ns_list
         template = "view_dns_nameservers.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View DNS servers'
         return_dict['tab'] = 'view_dns_nameservers_tab'
@@ -703,7 +703,7 @@ def update_dns_nameservers(request):
                 url = "update_dns_nameservers.html"
         return_dict["form"] = form
         return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Modify DNS servers'
         return_dict['tab'] = 'view_dns_nameservers_tab'

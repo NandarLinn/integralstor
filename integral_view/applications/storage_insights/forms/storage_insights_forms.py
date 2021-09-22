@@ -40,7 +40,7 @@ class ScanConfigurationForm(folder_management_forms.DirForm):
             components = None
             try:
                 components = cd['exclude_dirs'].split(',')
-            except Exception, e:
+            except Exception as e:
                 self._errors['exclude_dirs'] = self.error_class(
                     ["Please specify a valid set of directories to exclude"])
             if components:

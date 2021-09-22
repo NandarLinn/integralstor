@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.monitoring.views.monitoring import view_read_write_stats, api_get_status, view_remote_monitoring_servers, update_remote_monitoring_server, delete_remote_monitoring_server, view_remote_monitoring_server_status, refresh_alerts, view_alerts, view_dashboard

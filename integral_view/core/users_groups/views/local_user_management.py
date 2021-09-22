@@ -39,7 +39,7 @@ def view_local_users(request):
                 return_dict['ack_message'] = "Local user's group successfully updated"
 
         return django.shortcuts.render_to_response('view_local_users.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Local users'
         return_dict['tab'] = 'view_local_users_tab'
@@ -74,7 +74,7 @@ def view_local_groups(request):
                 return_dict['ack_message'] = "Local group membership successfully modified"
 
         return django.shortcuts.render_to_response('view_local_groups.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Local groups'
         return_dict['tab'] = 'view_local_groups_tab'
@@ -115,7 +115,7 @@ def view_local_user(request):
                 return_dict['ack_message'] = "Successfully update password"
 
         return django.shortcuts.render_to_response('view_local_user.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Local user details'
         return_dict['tab'] = 'view_local_users_tab'
@@ -156,7 +156,7 @@ def view_local_group(request):
                 return_dict['ack_message'] = "Local group membership successfully modified"
 
         return django.shortcuts.render_to_response('view_local_group.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Local group details'
         return_dict['tab'] = 'view_local_groups_tab'
@@ -237,7 +237,7 @@ def update_local_user_group_membership(request):
             else:
                 # Invalid form
                 return django.shortcuts.render_to_response('update_local_user_group_membership.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Local users additional group membership'
         return_dict['tab'] = 'view_local_users_tab'
@@ -292,7 +292,7 @@ def create_local_user(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_local_user.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Create a local users'
         return_dict['tab'] = 'view_local_users_tab'
@@ -332,7 +332,7 @@ def create_local_group(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_local_group.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Create a local user group'
         return_dict['tab'] = 'view_local_groups_tab'
@@ -379,7 +379,7 @@ def delete_local_group(request):
             audit.audit("delete_local_group", audit_str, request)
             url = '/users_groups/view_local_groups?ack=deleted'
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Delete a local user group'
         return_dict['tab'] = 'view_local_groups_tab'
@@ -416,7 +416,7 @@ def delete_local_user(request):
             audit.audit("delete_local_user", audit_str, request)
             url = '/users_groups/view_local_users?ack=deleted'
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Delete a local user'
         return_dict['tab'] = 'view_local_users_tab'
@@ -463,7 +463,7 @@ def update_local_user_password(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("update_local_user_password.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = "Modify local user's password"
         return_dict['tab'] = 'view_local_users_tab'
@@ -560,7 +560,7 @@ def update_group_membership(request):
                 return django.http.HttpResponseRedirect(url)
             else:
                 return django.shortcuts.render_to_response("update_group_membership.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = 'users_groups_base.html'
         return_dict["page_title"] = 'Modify group membership'
         return_dict['tab'] = 'view_local_groups_tab'

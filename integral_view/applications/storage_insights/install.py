@@ -44,12 +44,12 @@ def configure_storage_insights(recreate_db=False):
                 with open("%s/storage_insights.schema" % db_dir, 'r') as f:
                     cursor.executescript(f.read())
 
-    except Exception, e:
+    except Exception as e:
         return None, "Error while configuring storage insights: %s" % e
     else:
         return True
 
 if __name__ == '__main__':
-    print configure_storage_insights(recreate_db=False)
+    print((configure_storage_insights(recreate_db=False)))
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

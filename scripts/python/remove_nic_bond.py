@@ -13,13 +13,13 @@ def remove_bond():
         if not interfaces:
             raise Exception('No interfaces detected')
 
-        print
-        print
-        print 'IntegralSTOR NIC Bonding'
-        print '---------------------------------'
-        print
-        print
-        print 'Active bond(s): \n'
+        print()
+        print()
+        print('IntegralSTOR NIC Bonding')
+        print('---------------------------------')
+        print()
+        print()
+        print('Active bond(s): \n')
 
         bm, err = networking.get_bonding_masters()
         if err:
@@ -29,20 +29,20 @@ def remove_bond():
             raise Exception(err)
 
         avail_if = []
-        for if_name, iface in interfaces.items():
+        for if_name, iface in list(interfaces.items()):
             if if_name in bm:
-                print '\t- %s' % if_name
+                print(('\t- %s' % if_name))
                 avail_if.append(if_name)
-        print "\n"
+        print("\n")
         if not avail_if:
             raise Exception('There is nothing to remove!')
 
         bond_name = None
         is_name = False
         while is_name is False:
-            bond_name = raw_input('To remove a bond, provide its name: ')
+            bond_name = eval(input('To remove a bond, provide its name: '))
             if bond_name not in avail_if:
-                print "\t- Can't remove %s, no such bond exists. Please provide another one.\n" % bond_name
+                print(("\t- Can't remove %s, no such bond exists. Please provide another one.\n" % bond_name))
             else:
                 is_name = True
 
@@ -53,10 +53,10 @@ def remove_bond():
             else:
                 raise Exception("Couldn't remove bond")
         if ret:
-            print "\n\tBond removed!\n"
+            print("\n\tBond removed!\n")
 
-        print
-        print 'Regenerating manifest and status.'
+        print()
+        print('Regenerating manifest and status.')
         python_scripts_path, err = config.get_python_scripts_path()
         if err:
             raise Exception(err)
@@ -75,11 +75,11 @@ def remove_bond():
             "python %s/generate_status.py %s" % (python_scripts_path, status_path))
         if err:
             raise Exception(err)
-        print 'Regenerating manifest and status... Done'
-        print
-    except Exception, e:
-        print "Error: %s" % e
-        print
+        print('Regenerating manifest and status... Done')
+        print()
+    except Exception as e:
+        print(("Error: %s" % e))
+        print()
         return -1
     else:
         return 0

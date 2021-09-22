@@ -13,7 +13,7 @@ def display_status():
         if err:
             raise Exception(err)
         if use_salt:
-            print "Salt master service status :",
+            print("Salt master service status :", end=' ')
             (r, rc), err = command.execute_with_rc(
                 'service salt-master status')
             if err:
@@ -22,14 +22,14 @@ def display_status():
             if err:
                 raise Exception(err)
             if l:
-                print '\n'.join(l)
+                print('\n'.join(l))
             else:
                 l, err = command.get_error_list(r)
                 if err:
                     raise Exception(err)
                 if l:
-                    print '\n'.join(l)
-            print "Salt minion service status :",
+                    print('\n'.join(l))
+            print("Salt minion service status :", end=' ')
             (r, rc), err = command.execute_with_rc(
                 'service salt-minion status')
             if err:
@@ -38,15 +38,15 @@ def display_status():
             if err:
                 raise Exception(err)
             if l:
-                print '\n'.join(l)
+                print('\n'.join(l))
             else:
                 l, err = command.get_error_list(r)
                 if err:
                     raise Exception(err)
-                print l
+                print(l)
                 if l:
-                    print '\n'.join(l)
-        print "Samba service status :",
+                    print('\n'.join(l))
+        print("Samba service status :", end=' ')
         (r, rc), err = command.execute_with_rc('service smb status')
         if err:
             raise Exception(err)
@@ -54,14 +54,14 @@ def display_status():
         if err:
             raise Exception(err)
         if l:
-            print '\n'.join(l)
+            print('\n'.join(l))
         else:
             l, err = command.get_error_list(r)
             if err:
                 raise Exception(err)
             if l:
-                print '\n'.join(l)
-        print "Winbind service status :",
+                print('\n'.join(l))
+        print("Winbind service status :", end=' ')
         (r, rc), err = command.execute_with_rc('service winbind status')
         if err:
             raise Exception(err)
@@ -69,15 +69,15 @@ def display_status():
         if err:
             raise Exception(err)
         if l:
-            print '\n'.join(l)
+            print('\n'.join(l))
         else:
             l, err = command.get_error_list(r)
             if err:
                 raise Exception(err)
             if l:
-                print '\n'.join(l)
-    except Exception, e:
-        print "Error displaying system status : %s" % e
+                print('\n'.join(l))
+    except Exception as e:
+        print("Error displaying system status : %s" % e)
         return -1
     else:
         return 0
@@ -86,14 +86,14 @@ def display_status():
 if __name__ == '__main__':
 
     os.system('clear')
-    print
-    print
-    print
-    print "IntegralSTOR configuration"
-    print "----------------------------------"
+    print()
+    print()
+    print()
+    print("IntegralSTOR configuration")
+    print("----------------------------------")
     rc = display_status()
-    print
-    print
+    print()
+    print()
     # sys.exit(rc)
 
 

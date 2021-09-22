@@ -61,7 +61,7 @@ def main():
                 alerts_dict, err = dell.get_alert_logs()
                 if alerts_dict:
                     current_time = int(time.time())
-                    for time_stamp, alerts_list in alerts_dict.items():
+                    for time_stamp, alerts_list in list(alerts_dict.items()):
                         for alert_dict in alerts_list:
                             if alert_dict['Severity'] == 'Critical':
                                 if (current_time - time_stamp) < (60 * 60):
@@ -73,8 +73,8 @@ def main():
 
         lock.release_lock('integralstor_poll_for_alerts')
 
-    except Exception, e:
-        print "Error generating alerts : %s ! Exiting." % str(e)
+    except Exception as e:
+        print(("Error generating alerts : %s ! Exiting." % str(e)))
         logger.log_or_print('Error polling for alerts : %s' %
                             e, lg, level='critical')
         return -1

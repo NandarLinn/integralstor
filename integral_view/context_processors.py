@@ -10,7 +10,7 @@ def get_version(request):
         version, err = config.get_version()
         if err:
             raise Exception('Error retrieving version number')
-    except Exception, e:
+    except Exception as e:
         return {'version': 'Unspecified version'}
     else:
         return {'version': version}
@@ -21,8 +21,8 @@ def get_brand_config(request):
         return_dict, err = config.get_branding_config()
         if err:
             raise Exception(err)
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
         return return_dict
     else:
         return return_dict

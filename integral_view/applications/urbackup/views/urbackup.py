@@ -20,7 +20,7 @@ def view_backup(request):
         return_dict['url'] = url
         return django.shortcuts.render_to_response("view_backup.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "urbackup_base.html"
         return_dict["page_title"] = 'Data backup'
         return_dict['tab'] = 'view_backup_tab'

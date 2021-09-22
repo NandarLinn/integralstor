@@ -31,7 +31,7 @@ def main():
         ret, err = tasks_utils.process_tasks()
         if err:
             raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         str = 'Error running the task processor : %s' % e
         lock.release_lock('task_processor')
         logger.log_or_print(str, lg, level='critical')

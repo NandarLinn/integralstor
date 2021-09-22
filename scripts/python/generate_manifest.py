@@ -36,7 +36,7 @@ def gen_manifest(path):
                 shutil.copyfile(fullpath, fullcopypath)
             # Now move the tmp to the actual manifest file name
             shutil.move(fulltmppath, fullpath)
-    except Exception, e:
+    except Exception as e:
         lock.release_lock('generate_manifest')
         return -1, 'Error generating manifest : %s' % str(e)
     else:
@@ -74,7 +74,7 @@ def main():
         if err:
             raise Exception(err)
         # print rc
-    except Exception, e:
+    except Exception as e:
         str = "Error generating manifest file : %s" % e
         logger.log_or_print(str, lg, level='critical')
         return -1

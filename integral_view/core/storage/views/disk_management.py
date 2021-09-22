@@ -48,7 +48,7 @@ def view_disks(request):
             return django.shortcuts.render_to_response('view_os_disks.html', return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             return django.shortcuts.render_to_response('view_data_disks.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Disks'
         return_dict['tab'] = 'view_%s_disks_tab' % type
@@ -95,7 +95,7 @@ def identify_disk(request):
             raise Exception(err)
         return django.http.HttpResponseRedirect('/storage/view_disks?ack=%s&type=%s' % (action, disk_type))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Disks'
         return_dict['tab'] = 'view_data_disks_tab'
@@ -231,7 +231,7 @@ def replace_disk(request):
                         return_dict["serial_number"] = serial_number
                         return_dict["pool"] = pool
                         return_dict["old_id"] = old_id
-                        old_disks = si["disks"].keys()
+                        old_disks = list(si["disks"].keys())
                         result = False
                         new_disks, err = disks.get_disk_info_status_all(
                             rescan=True)
@@ -249,7 +249,7 @@ def replace_disk(request):
                         if new_disks:
                             # print new_disks.keys()
                             # print old_disks
-                            for disk in new_disks.keys():
+                            for disk in list(new_disks.keys()):
                                 # print disk
                                 if disk not in old_disks:
                                     # print 'new disk : ', disk
@@ -308,7 +308,7 @@ def replace_disk(request):
                     return_dict["serial_number"] = request.POST["serial_number"]
                     template = "replace_disk_conf.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Replace a disk in a ZFS pool'
         return_dict['tab'] = 'view_data_disks_tab'

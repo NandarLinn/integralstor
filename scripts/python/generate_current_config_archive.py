@@ -81,7 +81,7 @@ def main():
         except Exception as e:
             raise Exception(
                 "Error compressing log file : %s" % str(e))
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('generate_current_config_archive')
         logger.log_or_print('Error generating current config archive : %s' %

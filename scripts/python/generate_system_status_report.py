@@ -130,7 +130,7 @@ def main():
             if err:
                 raise Exception(err)
 
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('generate_system_status_report')
         logger.log_or_print('Error generating system status report : %s' %
@@ -192,7 +192,7 @@ def generate_global_header(f):
         f.write(
             '##########################################################################\n\n')
         f.write('\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating global header : %s' % str(e)
     else:
         return True, None
@@ -211,7 +211,7 @@ def generate_cpu_section(f):
         f.write('Number of cores : %s\n' % cpu_cores)
         f.write('\n')
         f.write('--------------------- CPU info END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating CPU section: %s' % str(e)
     else:
         return True, None
@@ -242,7 +242,7 @@ def generate_dell_hw_status(f):
                     f.write('\n')
                 f.write(
                     '--------------------- Dell hardware status END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating Dell hardware statussection: %s' % str(e)
     else:
         return True, None
@@ -261,7 +261,7 @@ def generate_memory_section(f):
                 (mem_info['mem_free']['value'], mem_info['mem_free']['unit']))
         f.write('\n')
         f.write('--------------------- RAM info END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating memory section: %s' % str(e)
     else:
         return True, None
@@ -288,7 +288,7 @@ def generate_zfs_info_section(f):
         f.write('Number of ZFS snapshots: %d\n' % count)
         f.write('\n')
         f.write('--------------------- ZFS info END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating CPU section: %s' % str(e)
     else:
         return True, None
@@ -304,7 +304,7 @@ def _get_count(type):
         if err:
             raise Exception(err)
         ret = int(lines[0].strip())
-    except Exception, e:
+    except Exception as e:
         return None, 'Error generating ZFS count : %s' % str(e)
     else:
         return ret, None
@@ -327,7 +327,7 @@ def generate_alerts_section(f, start_time, past_x_days):
                     al['repeat_count'])
             f.write('\n')
         f.write('--------------------- Recent alerts END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating alerts section: %s' % str(e)
     else:
         return True, None
@@ -348,7 +348,7 @@ def generate_audits_section(f, start_time, past_x_days):
             f.write('\n')
         f.write(
             '--------------------- Recent audited actions END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating audit section: %s' % str(e)
     else:
         return True, None
@@ -373,7 +373,7 @@ def generate_disks_status_section(f):
             f.write('\n'.join(lines))
             f.write('\n')
         f.write('--------------------- Disk status END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating disk status section: %s' % str(e)
     else:
         return True, None
@@ -390,7 +390,7 @@ def generate_command_based_section(f, cmd, section_name):
         f.write('\n')
         f.write(
             '--------------------- %s END ------------------------\n\n' % section_name)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating %s section: %s' % (section_name, str(e))
     else:
         return True, None
@@ -414,7 +414,7 @@ def generate_dmidecode_section(f):
         f.write('\n')
         f.write(
             '--------------------- Hardware information END ------------------------\n\n')
-    except Exception, e:
+    except Exception as e:
         return False, 'Error generating hardware information section: %s' % (str(e))
     else:
         return True, None

@@ -31,7 +31,7 @@ def view_scheduled_notifications(request):
 
         return_dict['ent_list'] = ent_list
         return django.shortcuts.render_to_response("view_scheduled_notifications.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'View scheduled notifications'
         return_dict['tab'] = 'scheduled_notifications_tab'
         return_dict["error"] = 'Error loading scheduled notifications list'
@@ -52,7 +52,7 @@ def create_scheduled_notification(request):
             ['reference_event_types', 'reference_event_subtypes', 'reference_notification_types', 'reference_severity_types', 'reference_subsystem_types'])
         if err:
             raise Exception(err)
-        if 'event_type_id' not in req_params or int(req_params['event_type_id']) not in reference_table_entries['reference_event_types'].keys():
+        if 'event_type_id' not in req_params or int(req_params['event_type_id']) not in list(reference_table_entries['reference_event_types'].keys()):
             raise Exception('Invalid request. Please use the menus.')
         return_dict['event_type_id'] = req_params['event_type_id']
         event_type_id = int(req_params['event_type_id'])
@@ -130,7 +130,7 @@ def create_scheduled_notification(request):
                 audit.audit("create_report_notification", audit_str, request)
 
             return django.http.HttpResponseRedirect('/system/view_scheduled_notifications?ack=created')
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Crete scheduled notification'
         return_dict['tab'] = 'scheduled_notifications_tab'
         return_dict["error"] = 'Error creating scheduled notification'
@@ -165,7 +165,7 @@ def delete_scheduled_notification(request):
         elif ent['event_type_id'] == 3:
             audit.audit("delete_report_notification", audit_str, request)
         return django.http.HttpResponseRedirect('/system/view_scheduled_notifications?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Remove scheduled notification'
         return_dict['tab'] = 'scheduled_notifications_tab'
         return_dict["error"] = 'Error removing scheduled notification'

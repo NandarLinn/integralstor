@@ -142,7 +142,7 @@ def create_remote_replication(request):
                         # switch dict is retained as string in the
                         # request. Convert it.
                         s = ast.literal_eval(switch)
-                        for k, v in s.items():
+                        for k, v in list(s.items()):
                             initial['switches'][k] = s[k]
                 initial['rsync_type'] = str(req_ret['rsync_type'])
                 initial['local_path'] = str(req_ret['local_path'])
@@ -308,7 +308,7 @@ def _create_rsync_remote_replication(request, cleaned_data):
         if 'switches' in cd and cd['switches']:
             for switch in cd['switches']:
                 s = ast.literal_eval(switch)
-                for k, v in s.items():
+                for k, v in list(s.items()):
                     if v['is_arg']:
                         v['arg_value'] = cd['%s_arg' % v['id']]
                 switches.update(s)

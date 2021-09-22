@@ -64,7 +64,7 @@ def main():
             retval, err = alerts.record_alerts(alerts_list)
             if err:
                 raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('check_zfs_pools_usage')
         logger.log_or_print('Error checking ZFS pool usage: %s' %

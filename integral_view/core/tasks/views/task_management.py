@@ -26,7 +26,7 @@ def view_scheduled_tasks(request):
 
         return_dict["tasks"] = tasks
         return django.shortcuts.render_to_response("view_scheduled_tasks.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Scheduled tasks'
         return_dict['tab'] = 'view_scheduled_tasks_tab'
@@ -69,7 +69,7 @@ def update_scheduled_task_schedule(request):
             audit_str = 'Modified the schedule for "%s" to "%s"' % (cron_task_list[0]['description'].lower(), cron_task_list[0]['schedule_description'].lower())
             audit.audit("update_schedule_task_schedule", audit_str, request)
             return django.http.HttpResponseRedirect('/tasks/view_scheduled_tasks?ack=modified')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Scheduled tasks'
         return_dict['tab'] = 'view_scheduled_tasks_tab'
@@ -116,7 +116,7 @@ def view_background_tasks(request):
 
         return_dict["tasks"] = tasks
         return django.shortcuts.render_to_response("view_background_tasks.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background tasks'
         return_dict['tab'] = 'view_background_tasks_tab'
@@ -146,7 +146,7 @@ def delete_background_task(request):
         audit.audit("remove_background_task",
                     task['description'], request)
         return django.http.HttpResponseRedirect('/tasks/view_background_tasks?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background tasks'
         return_dict['tab'] = 'view_background_tasks_tab'
@@ -176,7 +176,7 @@ def stop_background_task(request):
         audit.audit("stop_background_task",
                     task['description'], request)
         return django.http.HttpResponseRedirect('/tasks/view_background_tasks?ack=stopped')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background tasks'
         return_dict['tab'] = 'view_background_tasks_tab'
@@ -216,11 +216,11 @@ def view_task_details(request, task_id):
                 first, err = command.get_command_output(
                     "head -n 5 %s" % log_file_path, shell=True)
                 if err:
-                    print err
+                    print(err)
                 last, err = command.get_command_output(
                     "tail -n 20 %s" % log_file_path, shell=True)
                 if err:
-                    print err
+                    print(err)
                 # print last
                 task_output = task_output + '\n'.join(first)
                 task_output = task_output + "\n.... \n ....\n"
@@ -228,7 +228,7 @@ def view_task_details(request, task_id):
         return_dict['task_output'] = task_output
 
         return django.shortcuts.render_to_response("view_task_details.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background jobs'
         return_dict['tab'] = 'view_background_tasks_tab'

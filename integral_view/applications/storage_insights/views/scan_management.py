@@ -46,7 +46,7 @@ def view_scans(request):
 
         return_dict['scans'] = scans
         return django.shortcuts.render_to_response('view_scans.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'View scans'
         return_dict['tab'] = 'view_scans_tab'
@@ -81,7 +81,7 @@ def delete_scan(request):
             audit_str = "Removed application Storage Insights scan details for folder '%s' run on %s" % (scans[0]['scan_dir'].lower(), scans[0]['initiate_time_str'])
             audit.audit("application_action", audit_str, request)
             return django.http.HttpResponseRedirect('/applications/storage_insights/view_scans?ack=deleted_scan')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'View scans'
         return_dict['tab'] = 'view_scans_tab'
@@ -118,7 +118,7 @@ def view_scan_configurations(request):
                         c['schedule_description'] = ct_list[0]['schedule_description']
         return_dict['configurations'] = configurations
         return django.shortcuts.render_to_response('view_scan_configurations.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'View scan configurations'
         return_dict['tab'] = 'scan_configurations_tab'
@@ -186,7 +186,7 @@ def create_scan_configuration(request):
             audit_str += ' Database transaction size set to %d.'%cd['db_transaction_size']
             audit.audit("application_action", audit_str, request)
             return django.http.HttpResponseRedirect('/applications/storage_insights/view_scan_configurations?ack=created_scan_configuration')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Create scan configuration'
         return_dict['tab'] = 'scan_configurations_tab'
@@ -229,7 +229,7 @@ def delete_scan_configuration(request):
             audit_str = "Removed application Storage Insights configuration for folder '%s'" % (configurations[0]['scan_dir'].lower())
             audit.audit("application_action", audit_str, request)
             return django.http.HttpResponseRedirect('/applications/storage_insights/view_scan_configurations?ack=deleted_scan_configuration')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Remove folder scan configuration'
         return_dict['tab'] = 'scan_configurations_tab'
@@ -272,7 +272,7 @@ def update_scan_schedule(request):
             audit_str = "Application Storage Insights scan process scheduled for %s." % cron_task_list[0]['schedule_description'].lower()
             audit.audit("application_action", audit_str, request)
             return django.http.HttpResponseRedirect('/applications/storage_insights/view_scan_configurations?ack=updated_scan_schedule')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Schedule folder scan'
         return_dict['tab'] = 'scan_configurations_tab'
@@ -319,7 +319,7 @@ def delete_scan_schedule(request):
             audit_str = "Removed application Storage Insights folder scan scheduled for %s" % (cron_task_list[0]['schedule_description'].lower())
             audit.audit("application_action", audit_str, request)
             return django.http.HttpResponseRedirect('/applications/storage_insights/view_scan_configurations?ack=deleted_scan_schedule')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Remove folder scan schedule'
         return_dict['tab'] = 'scan_schedule_tab'

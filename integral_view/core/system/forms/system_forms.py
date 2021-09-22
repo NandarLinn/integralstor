@@ -59,21 +59,21 @@ class AlertNotificationsForm(forms.Form):
               self).__init__(*args, **kwargs)
         ch = []
         if reference_subsystem_types:
-            for id, description in reference_subsystem_types.items():
+            for id, description in list(reference_subsystem_types.items()):
                 if id == -1:
                     continue
                 ch.append((id, description))
         self.fields['subsystem_type_id'] = forms.ChoiceField(choices=ch)
         ch = []
         if reference_severity_types:
-            for id, description in reference_severity_types.items():
+            for id, description in list(reference_severity_types.items()):
                 if id == -1:
                     continue
                 ch.append((id, description))
         self.fields['severity_type_id'] = forms.ChoiceField(choices=ch)
         ch = []
         if reference_notification_types:
-            for id, description in reference_notification_types.items():
+            for id, description in list(reference_notification_types.items()):
                 ch.append((id, description))
         self.fields['notification_type_id'] = forms.ChoiceField(choices=ch)
 
@@ -99,7 +99,7 @@ class AuditNotificationsForm(forms.Form):
               self).__init__(*args, **kwargs)
         ch = []
         if reference_notification_types:
-            for id, description in reference_notification_types.items():
+            for id, description in list(reference_notification_types.items()):
                 ch.append((id, description))
         self.fields['notification_type_id'] = forms.ChoiceField(choices=ch)
 
@@ -128,7 +128,7 @@ class LogNotificationsForm(forms.Form):
               self).__init__(*args, **kwargs)
         ch = []
         if reference_notification_types:
-            for id, description in reference_notification_types.items():
+            for id, description in list(reference_notification_types.items()):
                 ch.append((id, description))
         self.fields['notification_type_id'] = forms.ChoiceField(choices=ch)
 

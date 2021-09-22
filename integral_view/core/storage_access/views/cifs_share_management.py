@@ -29,7 +29,7 @@ def view_cifs_shares(request):
             return_dict["shares_list"] = shares_list
             template = "view_cifs_shares.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'CIFS shares'
         return_dict['tab'] = 'view_cifs_shares_tab'
@@ -94,7 +94,7 @@ def view_cifs_share(request):
         template = 'view_cifs_share.html'
 
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'CIFS share details'
         return_dict['tab'] = 'view_cifs_shares_tab'
@@ -212,7 +212,7 @@ def update_cifs_share(request):
             else:
                 # Invalid form
                 return django.shortcuts.render_to_response('update_cifs_share.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify a CIFS share'
         return_dict['tab'] = 'view_cifs_shares_tab'
@@ -246,7 +246,7 @@ def delete_cifs_share(request):
             audit_str = "Deleted CIFS share %s" % name
             audit.audit("delete_cifs_share", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_cifs_shares?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Delete a CIFS share'
         return_dict['tab'] = 'view_cifs_shares_tab'
@@ -328,7 +328,7 @@ def create_cifs_share(request):
                         audit_str = 'Created new directory "%s" in "%s"' % (
                             cd['new_folder'], cd['path'])
                         audit.audit("create_dir", audit_str, request)
-                    except Exception, e:
+                    except Exception as e:
                         raise Exception('Error creating subfolder %s : %s' % (
                             cd['new_folder'], str(e)))
 
@@ -391,7 +391,7 @@ def create_cifs_share(request):
                 return django.http.HttpResponseRedirect('/storage_access/view_cifs_shares?ack=created')
             else:
                 return django.shortcuts.render_to_response("create_cifs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create a CIFS share'
         return_dict['tab'] = 'view_cifs_shares_tab'
@@ -428,7 +428,7 @@ def update_auth_method(request):
                 raise Exception(err)
 
         return django.http.HttpResponseRedirect('/storage_access/update_samba_server_settings')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify CIFS authentication method'
         return_dict['tab'] = 'auth_server_settings_tab'
@@ -451,7 +451,7 @@ def view_samba_server_settings(request):
         if 'ack' in ret and ret['ack'] == 'saved':
             return_dict["ack_message"] = "Information updated successfully"
         return django.shortcuts.render_to_response('view_samba_server_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify CIFS authentication settings'
         return_dict['tab'] = 'auth_server_settings_tab'
@@ -470,7 +470,7 @@ def update_samba_server_settings(request):
                 raise Exception(err)
             ini = {}
             if d:
-                for k in d.keys():
+                for k in list(d.keys()):
                     if d[k]:
                         ini[k] = d[k]
             else:
@@ -479,7 +479,7 @@ def update_samba_server_settings(request):
                 form = samba_shares_forms.AuthADSettingsForm(initial=ini)
             else:
                 form = samba_shares_forms.AuthUsersSettingsForm(initial=ini)
-            print 'c'
+            print('c')
             return_dict["form"] = form
             return django.shortcuts.render_to_response('update_samba_server_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
         else:
@@ -502,7 +502,7 @@ def update_samba_server_settings(request):
                 cd = form.cleaned_data
                 # print "Calling auth save settings"
                 ret, err = cifs.update_auth_settings(cd)
-                print "save settings done"
+                print("save settings done")
                 if err:
                     raise Exception(err)
                 if cd["security"] == "ads":
@@ -544,7 +544,7 @@ def update_samba_server_settings(request):
         # return django.shortcuts.render_to_response('logged_in_error.html',
         # return_dict,
         # context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify CIFS authentication settings'
         return_dict['tab'] = 'auth_server_settings_tab'

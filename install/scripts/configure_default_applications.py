@@ -19,10 +19,10 @@ def configure_default_applications(reconfigure=False):
         if not os.path.exists(app_json_file):
             shutil.copy("%s/install/conf-files/others/applications.json" % integralstor_root,
                         app_json_file)
-    except Exception, e:
+    except Exception as e:
         return None, "Error configuring default applications %s" % e
     else:
         return True
 
 if __name__ == '__main__':
-    print configure_default_applications(reconfigure=True)
+    print((configure_default_applications(reconfigure=True)))

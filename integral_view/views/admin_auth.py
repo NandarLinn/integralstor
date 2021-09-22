@@ -70,7 +70,7 @@ def login(request):
         # For all other cases, return to login screen with return_dict
         # appropriately populated
         return django.shortcuts.render_to_response('login_form.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         s = str(e)
         return_dict["error"] = "An error occurred when processing your request : %s" % s
         return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
@@ -84,11 +84,11 @@ def logout(request):
         sessions = Session.objects.all()
         for s in sessions:
             if (s.get_decoded() and int(s.get_decoded()['_auth_user_id']) == request.user.id) or not s.get_decoded():
-                print 'deleting!'
+                print('deleting!')
                 s.delete()
         django.contrib.auth.logout(request)
         return django.http.HttpResponseRedirect('/login/')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "dashboard_base.html"
         return_dict["page_title"] = 'Logout'
         return_dict['tab'] = 'disks_tab'
@@ -140,7 +140,7 @@ def update_admin_password(request):
         else:
             # User not authenticated so return a login screen
             return django.http.HttpResponseRedirect('/login/')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Change admininistrator password'
         return_dict['tab'] = 'system_info_tab'

@@ -26,7 +26,7 @@ def view_nfs_shares(request):
         return_dict["exports_list"] = exports_list
         template = "view_nfs_shares.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'NFS shares'
         return_dict['tab'] = 'view_nfs_shares_tab'
@@ -58,7 +58,7 @@ def view_nfs_share(request):
 
         template = "view_nfs_share.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'View NFS share details'
         return_dict['tab'] = 'view_nfs_shares_tab'
@@ -86,7 +86,7 @@ def delete_nfs_share(request):
             audit_str = "Deleted NFS share %s" % path
             audit.audit("delete_nfs_share", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_nfs_shares?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove NFS share '
         return_dict['tab'] = 'view_nfs_shares_tab'
@@ -139,7 +139,7 @@ def update_nfs_share(request):
             audit_str = "Edited NFS share %s" % path
             audit.audit("edit_nfs_share", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_nfs_shares?ack=saved')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify a NFS share '
         return_dict['tab'] = 'view_nfs_shares_tab'
@@ -205,7 +205,7 @@ def create_nfs_share(request):
                         cd['new_folder'], cd['path'])
                     audit.audit("create_dir", audit_str, request)
                     cd['path'] = '%s/%s' % (cd['path'], cd['new_folder'])
-                except Exception, e:
+                except Exception as e:
                     raise Exception('Error creating subfolder %s : %s' % (
                         cd['new_folder'], str(e)))
             result, err = nfs.save_share(cd, True)
@@ -215,7 +215,7 @@ def create_nfs_share(request):
             audit_str = "Created NFS share %s" % cd['path']
             audit.audit("create_nfs_share", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_nfs_shares?ack=created')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create a NFS share '
         return_dict['tab'] = 'view_nfs_shares_tab'

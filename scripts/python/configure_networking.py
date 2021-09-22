@@ -15,29 +15,29 @@ def configure_interface():
                 'Error retrieving interface information : %s' % err)
         if not interfaces:
             raise Exception('No interfaces detected')
-        print
-        print
-        print 'IntegralSTOR interface configuration'
-        print '--------------------------------------------'
-        print
-        print
-        print 'Current network interfaces : '
-        print
-        for if_name, iface in interfaces.items():
+        print()
+        print()
+        print('IntegralSTOR interface configuration')
+        print('--------------------------------------------')
+        print()
+        print()
+        print('Current network interfaces : ')
+        print()
+        for if_name, iface in list(interfaces.items()):
             if if_name.startswith('lo'):
                 continue
-            print '- %s' % if_name
-        print
+            print(('- %s' % if_name))
+        print()
 
         valid_input = False
         while not valid_input:
-            ifname = raw_input(
-                'Enter the name of the interface that you wish to configure : ')
+            ifname = eval(input(
+                'Enter the name of the interface that you wish to configure : '))
             if ifname not in interfaces or ifname.startswith('lo'):
-                print 'Invalid interface name'
+                print('Invalid interface name')
             else:
                 valid_input = True
-        print
+        print()
         ip_info, err = networking.get_ip_info(ifname)
         '''
     if err:
@@ -66,7 +66,7 @@ def configure_interface():
         str_to_print = "Configure for DHCP or static addressing (dhcp/static)? : "
         valid_input = False
         while not valid_input:
-            input = raw_input(str_to_print)
+            input = eval(input(str_to_print))
             if input:
                 if input.lower() in ['static', 'dhcp']:
                     valid_input = True
@@ -74,8 +74,8 @@ def configure_interface():
                     if boot_proto != old_boot_proto:
                         config_changed = True
             if not valid_input:
-                print "Invalid value. Please try again."
-        print
+                print("Invalid value. Please try again.")
+        print()
 
         if boot_proto == 'static':
             if ip:
@@ -84,7 +84,7 @@ def configure_interface():
                 str_to_print = "Enter IP address (currently not set) : "
             valid_input = False
             while not valid_input:
-                input = raw_input(str_to_print)
+                input = eval(input(str_to_print))
                 if input:
                     ok, err = networking.validate_ip(input)
                     if err:
@@ -96,8 +96,8 @@ def configure_interface():
                 elif ip:
                     valid_input = True
                 if not valid_input:
-                    print "Invalid value. Please try again."
-            print
+                    print("Invalid value. Please try again.")
+            print()
 
             if netmask:
                 str_to_print = "Enter netmask (currently %s, press enter to retain current value) : " % netmask
@@ -105,7 +105,7 @@ def configure_interface():
                 str_to_print = "Enter netmask (currently not set) : "
             valid_input = False
             while not valid_input:
-                input = raw_input(str_to_print)
+                input = eval(input(str_to_print))
                 if input:
                     ok, err = networking.validate_netmask(input)
                     if err:
@@ -117,8 +117,8 @@ def configure_interface():
                 elif netmask:
                     valid_input = True
             if not valid_input:
-                print "Invalid value. Please try again."
-            print
+                print("Invalid value. Please try again.")
+            print()
 
             if gateway:
                 str_to_print = "Enter gateway (currently %s, press enter to retain current value) : " % gateway
@@ -126,7 +126,7 @@ def configure_interface():
                 str_to_print = "Enter gateway (currently not set) : "
             valid_input = False
             while not valid_input:
-                input = raw_input(str_to_print)
+                input = eval(input(str_to_print))
                 if input:
                     ok, err = networking.validate_ip(input)
                     if err:
@@ -138,8 +138,8 @@ def configure_interface():
                 elif gateway:
                     valid_input = True
                 if not valid_input:
-                    print "Invalid value. Please try again."
-            print
+                    print("Invalid value. Please try again.")
+            print()
         if config_changed:
             d = {}
             d['addr_type'] = boot_proto
@@ -156,21 +156,21 @@ def configure_interface():
                     raise Exception('Error changing interface address')
 
             restart = False
-            print
-            print
+            print()
+            print()
             valid_input = False
             while not valid_input:
                 str_to_print = 'Restart network services now (y/n) :'
-                print
-                input = raw_input(str_to_print)
+                print()
+                input = eval(input(str_to_print))
                 if input:
                     if input.lower() in ['y', 'n']:
                         valid_input = True
                         if input.lower() == 'y':
                             restart = True
                 if not valid_input:
-                    print "Invalid value. Please try again."
-            print
+                    print("Invalid value. Please try again.")
+            print()
 
             if restart:
                 ret, err = networking.restart_networking()
@@ -189,20 +189,20 @@ def configure_interface():
                     if err:
                         raise Exception(err)
                     if rc == 0:
-                        print "Salt minion service restarted succesfully."
+                        print("Salt minion service restarted succesfully.")
                     else:
-                        print "Error restarting salt minion services."
-                        raw_input('Press enter to return to the main menu')
+                        print("Error restarting salt minion services.")
+                        eval(input('Press enter to return to the main menu'))
                         return -1
         else:
-            print
-            print
-            raw_input(
-                'No changes have been made to the configurations. Press enter to return to the main menu.')
+            print()
+            print()
+            eval(input(
+                'No changes have been made to the configurations. Press enter to return to the main menu.'))
             return 0
 
-    except Exception, e:
-        print "Error configuring network settings : %s" % e
+    except Exception as e:
+        print(("Error configuring network settings : %s" % e))
         return -1
     else:
         return 0
@@ -212,10 +212,10 @@ if __name__ == '__main__':
 
     # print sys.argv
     if len(sys.argv) != 2:
-        print 'Incorrect usage. Usage : configure_networking interface|dns|gateway'
+        print('Incorrect usage. Usage : configure_networking interface|dns|gateway')
         sys.exit(-1)
     if sys.argv[1] not in ['interface']:
-        print 'Incorrect usage. Usage : configure_networking interface|dns|gateway'
+        print('Incorrect usage. Usage : configure_networking interface|dns|gateway')
         sys.exit(-1)
     if sys.argv[1] == 'interface':
         rc = configure_interface()

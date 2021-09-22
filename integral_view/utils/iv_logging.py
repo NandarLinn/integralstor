@@ -32,7 +32,7 @@ def set_log_level(level):
             if err:
                 raise Exception(err)
             logger.setLevel(level)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error setting log level : %s' % str(e)
     else:
         return True, None
@@ -53,7 +53,7 @@ def get_log_level_str():
             return 'Errors'
         else:
             return 'Unknown'
-    except Exception, e:
+    except Exception as e:
         return False, 'Error getting log level string: %s' % str(e)
     else:
         return True, None
@@ -80,7 +80,7 @@ def get_log_level():
             if err:
                 raise Exception(err)
             log_level = logging.INFO
-    except Exception, e:
+    except Exception as e:
         return None, "Error getting log level : %s" % str(e)
     else:
         return log_level, None
@@ -90,7 +90,7 @@ def info(msg):
     try:
         logger.setLevel(get_log_level())
         logger.info(msg)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error logging info : %s' % str(e)
     else:
         return True, None
@@ -100,7 +100,7 @@ def debug(msg):
     try:
         logger.setLevel(get_log_level())
         logger.debug(msg)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error logging debug : %s' % str(e)
     else:
         return True, None
@@ -110,7 +110,7 @@ def critical(msg):
     try:
         logger.setLevel(get_log_level(logger))
         logger.critical(msg)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error logging critical : %s' % str(e)
     else:
         return True, None
@@ -120,7 +120,7 @@ def warn(msg):
     try:
         logger.setLevel(get_log_level(logger))
         logger.warn(msg)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error logging warning : %s' % str(e)
     else:
         return True, None
@@ -130,7 +130,7 @@ def error(msg):
     try:
         logger.setLevel(get_log_level(logger))
         logger.error(msg)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error logging error : %s' % str(e)
     else:
         return True, None

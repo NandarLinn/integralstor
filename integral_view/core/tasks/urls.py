@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.tasks.views.task_management import view_background_tasks, view_task_details, delete_background_task, stop_background_task, view_scheduled_tasks, update_scheduled_task_schedule

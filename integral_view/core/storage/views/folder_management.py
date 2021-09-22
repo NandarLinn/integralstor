@@ -22,7 +22,7 @@ def _sticky_bit_enabled(path):
     try:
         s = os.stat(path)
         sticky_bit = ((s.st_mode & stat.S_ISVTX) == stat.S_ISVTX)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error checking for sticky bit for folder %s : %s' % (path, str(e))
     else:
         return sticky_bit, None
@@ -35,7 +35,7 @@ def _has_subdirs(full_path):
         for content in contents:
             if os.path.isdir('%s/%s' % (full_path, content)):
                 subdirs = True
-    except Exception, e:
+    except Exception as e:
         return False, 'Error checking for subdirs : %s' % str(e)
     else:
         return subdirs, None
@@ -48,7 +48,7 @@ def _get_subdirs(full_path):
         for content in contents:
             if os.path.isdir('%s/%s' % (full_path, content)):
                 subdirs.append(content)
-    except Exception, e:
+    except Exception as e:
         return None, 'Error getting subdirs : %s' % str(e)
     else:
         return subdirs, None
@@ -287,7 +287,7 @@ def create_aces(request):
                 return django.http.HttpResponseRedirect('/storage_access/view_cifs_share?access_mode=by_id&index=%s&ack=aces_added' % share_index)
             else:
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=aces_added' % path)
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Add new  ACL entries'
         return_dict["error"] = 'Error adding new ACL entries'
         return_dict["error_details"] = str(e)
@@ -456,7 +456,7 @@ def update_aces(request):
                 return django.http.HttpResponseRedirect('/storage_access/view_cifs_share?access_mode=by_id&index=%s&ack=aces_modified' % share_index)
             else:
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=aces_modified' % path)
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Modify ACL entries'
         return_dict["error"] = 'Error modifying ACL entries'
         return_dict["error_details"] = str(e)
@@ -530,7 +530,7 @@ def delete_ace(request):
                 return django.http.HttpResponseRedirect('/storage_access/view_cifs_share?access_mode=by_id&index=%s&ack=ace_deleted' % share_index)
             else:
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=ace_deleted' % path)
-    except Exception, e:
+    except Exception as e:
         return_dict["page_title"] = 'Delete an ACL entry'
         return_dict["error"] = 'Error deleting an ACL entry'
         return_dict["error_details"] = str(e)
@@ -560,7 +560,7 @@ def create_dir(request):
         path = req_ret['path']
         try:
             stat_info = os.stat(path)
-        except Exception, e:
+        except Exception as e:
             raise Exception(
                 'Error accessing specified base directory : %s' % str(e))
         return_dict['path'] = path
@@ -602,7 +602,7 @@ def create_dir(request):
             else:
                 return_dict['form'] = form
                 return django.shortcuts.render_to_response('create_dir.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Create a directory'
         return_dict['tab'] = 'dir_permissions_tab'
@@ -670,7 +670,7 @@ def delete_dir(request):
             else:
                 raise Exception(
                     'Could not delete the specified directory as there was an error in the specified parameters.')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Delete a directory'
         return_dict['tab'] = 'dir_permissions_tab'
@@ -712,8 +712,8 @@ def view_dir_listing(request):
         #resp += '</body></html>'
         # print 'resp ', resp
         return HttpResponse(resp, content_type='text/html')
-    except Exception, e:
-        print str(e)
+    except Exception as e:
+        print((str(e)))
         return HttpResponse('Error processing request : %s' % str(e), content_type='text/html')
 
 
@@ -757,7 +757,7 @@ def view_dir_manager(request):
             initial=initial, pool_list=pool_list)
         return_dict["form"] = form
         return django.shortcuts.render_to_response('view_dir_manager.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Directory manager'
         return_dict['tab'] = 'dir_manager_tab'
@@ -794,18 +794,18 @@ def view_dir_ownership_permissions(request):
         return_dict['path'] = path
         try:
             stat_info = os.stat(path)
-        except Exception, e:
+        except Exception as e:
             raise Exception('Error accessing specified path : %s' % str(e))
 
         uid = stat_info.st_uid
         gid = stat_info.st_gid
         try:
             username = pwd.getpwuid(uid)[0]
-        except Exception, e:
+        except Exception as e:
             username = 'Unknown'
         try:
             grpname = grp.getgrgid(gid)[0]
-        except Exception, e:
+        except Exception as e:
             grpname = 'Unknown'
         sticky_bit_enabled, err = _sticky_bit_enabled(path)
         if err:
@@ -835,7 +835,7 @@ def view_dir_ownership_permissions(request):
             return_dict['group_aces'] = group_aces
 
         return django.shortcuts.render_to_response('view_dir_ownership_permissions.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Directory manager'
         return_dict['tab'] = 'dir_manager_tab'
@@ -867,7 +867,7 @@ def update_dir_owner(request):
             path = request.GET['path']
             try:
                 stat_info = os.stat(path)
-            except Exception, e:
+            except Exception as e:
                 raise Exception('Error accessing specified path : %s' % str(e))
             uid = stat_info.st_uid
             gid = stat_info.st_gid
@@ -900,7 +900,7 @@ def update_dir_owner(request):
             else:
                 return django.shortcuts.render_to_response('update_dir_ownership.html', return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Modify directory ownership'
         return_dict['tab'] = 'dir_permissions_tab'
@@ -958,7 +958,7 @@ def update_dir_permissions(request):
             path = req_ret['path']
         try:
             stat_info = os.stat(path)
-        except Exception, e:
+        except Exception as e:
             raise Exception('Error accessing specified path : %s' % str(e))
         uid = stat_info.st_uid
         gid = stat_info.st_gid
@@ -1033,7 +1033,7 @@ def update_dir_permissions(request):
                 exports, err = nfs.load_exports_list()
                 if exports:
                     for export in exports:
-                        print id(export["path"]), id(path)
+                        print((id(export["path"]), id(path)))
                         if export["path"] == path:
                             delete = "false"
                             break
@@ -1041,7 +1041,7 @@ def update_dir_permissions(request):
                             delete = "true"
 
                 if delete:
-                    print delete
+                    print(delete)
                     # shutil.rmtree(path,ignore_errors=True)
                     audit_str = "Deleting directory %s" % path
                     audit.audit("modify_dir_owner_permissions",
@@ -1072,7 +1072,7 @@ def update_dir_permissions(request):
 
         else:
             return django.shortcuts.render_to_response('update_dir_permissions.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Modify ownership/permissions on a directory'
         return_dict['tab'] = 'dir_permissions_tab'
@@ -1136,7 +1136,7 @@ def update_sticky_bit(request):
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=modified_sticky_bit' % cd['path'])
             else:
                 return django.shortcuts.render_to_response('update_dir_ownership.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Modify directory sticky bit settings'
         return_dict['tab'] = 'dir_permissions_tab'

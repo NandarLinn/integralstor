@@ -97,7 +97,7 @@ def main():
                         enh['enh_id'])
                     if err:
                         raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         logger.log_or_print('Error processing alert notifications : %s' %
                             e, lg, level='critical')

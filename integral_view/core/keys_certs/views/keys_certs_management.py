@@ -23,7 +23,7 @@ def view_ssl_certificates(request):
                 return_dict['ack_message'] = "A new SSL certificate has been successfully uploaded"
         return_dict["cert_list"] = cert_list
         return django.shortcuts.render_to_response('view_ssl_certificates.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'SSL certificates'
         return_dict['tab'] = 'certificates_tab'
@@ -57,7 +57,7 @@ def delete_ssl_certificate(request):
             audit.audit("delete_certificate", audit_str,
                         request)
             return django.http.HttpResponseRedirect('/keys_certs/view_ssl_certificates?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Delete a SSL certificate'
         return_dict['tab'] = 'certificates_tab'
@@ -88,7 +88,7 @@ def create_self_signed_ssl_certificate(request):
             audit.audit("create_self_signed_certificate",
                         audit_str, request)
             return django.http.HttpResponseRedirect('/keys_certs/view_ssl_certificates?ack=created_self_signed_cert')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Create a self signed SSL certificate'
         return_dict['tab'] = 'certificates_tab'
@@ -119,7 +119,7 @@ def upload_ssl_certificate(request):
             audit.audit("upload_certificate", audit_str,
                         request.META)
             return django.http.HttpResponseRedirect('/keys_certs/view_ssl_certificates?ack=uploaded_cert')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Upload a SSL certificate'
         return_dict['tab'] = 'certificates_tab'
@@ -167,7 +167,7 @@ def upload_ssh_user_key(request):
             return django.http.HttpResponseRedirect("/keys_certs/view_user_ssh_keys/?ack=%s&user=%s" % (ack_message, user))
         elif request.method == 'GET':
             return django.shortcuts.render_to_response("upload_ssh_user_key.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Upload a Public Key'
         return_dict['tab'] = 'upload_public_key_tab'
@@ -222,7 +222,7 @@ def upload_ssh_host_key(request):
             return django.http.HttpResponseRedirect("/keys_certs/view_known_hosts_ssh_keys/?ack=%s&user=%s" % (ack_message, user))
         elif request.method == 'GET':
             return django.shortcuts.render_to_response("upload_ssh_host_key.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Upload a Host Key'
         return_dict['tab'] = 'host_ssh_keys_tab'
@@ -255,7 +255,7 @@ def view_user_ssh_keys(request):
                 return_dict['ack_message'] = "The Public Key has been successfully added"
 
         return django.shortcuts.render_to_response("view_user_ssh_keys.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'User SSH keys'
         return_dict['tab'] = 'user_ssh_keys_tab'
@@ -287,7 +287,7 @@ def view_known_hosts_ssh_keys(request):
                 return_dict['ack_message'] = "The Host Key has been successfully added"
 
         return django.shortcuts.render_to_response("view_known_hosts_ssh_keys.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Known hosts SSH fingerprint'
         return_dict['tab'] = 'host_ssh_keys_tab'

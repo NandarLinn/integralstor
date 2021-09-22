@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.storage_access.views.cifs_share_management import view_cifs_shares, create_cifs_share, view_samba_server_settings, update_samba_server_settings, view_cifs_share, update_cifs_share, delete_cifs_share, update_auth_method

@@ -57,7 +57,7 @@ def create_rsync_share(request):
                 cd["name"], "Browsable" if cd["browsable"] else "Not Browsable", "Readonly" if cd["readonly"] else "Read/Write")
             audit.audit("create_rsync_share", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_rsync_shares/?ack=created')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync shares'
         return_dict['tab'] = 'view_rsync_shares_tab'
@@ -108,7 +108,7 @@ def update_rsync_share(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("update_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync Share'
         return_dict['tab'] = 'view_rsync_shares_tab'
@@ -132,7 +132,7 @@ def view_rsync_shares(request):
             raise Exception("Unable to load Rsync Shares")
         return_dict["shares"] = shares
         return django.shortcuts.render_to_response("view_rsync_shares.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync shares'
         return_dict['tab'] = 'view_rsync_shares_tab'
@@ -156,7 +156,7 @@ def delete_rsync_share(request):
             audit_str = "Deleted RSYNC share %s" % name
             audit.audit("delete_rsync_share", audit_str, request)
             return django.http.HttpResponseRedirect("/storage_access/view_rsync_shares/?ack=deleted")
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync shares'
         return_dict['tab'] = 'view_rsync_shares_tab'

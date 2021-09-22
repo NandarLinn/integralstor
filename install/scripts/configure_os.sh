@@ -37,14 +37,14 @@ sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 # Link site-packages with python libraries dir
 #ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/lib/python2.7/site-packages/integralstor
-ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python2.7/site-packages/integralstor
+ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.5/site-packages/integralstor
 
 
 # To force NFS users to come in as nfsuser, create nfsuser
 nfs_usr='nfs-local'
 nfs_grp='nfs-local'
-nfs_usr=`python -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
-nfs_grp=`python -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
+nfs_usr=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
+nfs_grp=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
 groupadd "$nfs_grp" -g 1500
 useradd "$nfs_usr" -g 1500 -u 1500
 echo "$nfs_usr""123" | passwd --stdin "$nfs_usr"

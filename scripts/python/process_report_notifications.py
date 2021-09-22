@@ -111,7 +111,7 @@ def main():
                 # print 'enqueue', processed_successfully, err
                 if err:
                     raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         logger.log_or_print('Error processing report notifications : %s' %
                             e, lg, level='critical')

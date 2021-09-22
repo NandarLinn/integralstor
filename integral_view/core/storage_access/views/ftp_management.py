@@ -22,7 +22,7 @@ def view_ftp_configuration(request):
         return_dict['config'] = config
         return django.shortcuts.render_to_response('view_ftp_configuration.html', return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'View FTP service configuration'
         return_dict['tab'] = 'ftp_service_settings'
@@ -57,7 +57,7 @@ def update_ftp_configuration(request):
         if request.method == 'GET':
             initial = {}
             if config:
-                for key in config.keys():
+                for key in list(config.keys()):
                     initial[key] = config[key]
             form = ftp_management_forms.ConfigureFTPForm(
                 datasets=ds_list, cert_names=cert_name_list, initial=initial)
@@ -88,7 +88,7 @@ def update_ftp_configuration(request):
             ret, err = audit.audit("update_ftp_config",
                                    audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_ftp_configuration?ack=saved')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Configure FTP service'
         return_dict['tab'] = 'ftp_service_settings'
@@ -117,7 +117,7 @@ def create_ftp_user_dirs(request):
                     'Created FTP user directories', request)
         return django.http.HttpResponseRedirect('/storage_access/view_ftp_configuration?ack=dirs_created')
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create FTP user directories'
         return_dict['tab'] = 'ftp_service_settings'

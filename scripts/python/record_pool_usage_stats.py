@@ -35,7 +35,7 @@ def main():
         if err:
             raise Exception(err)
 
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('record_pool_usage_stats')
         logger.log_or_print('Error collecting pool usage stats : %s' %
@@ -69,7 +69,7 @@ def _record_pool_usage_stats():
                 ret, err = db.execute_iud(db_path, cmd_list)
             # Best effort.. continue if duplicate dates cause a problem when rerunning
             # print ret, err
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         return False, "Error recording ZFS pool usage statistics : %s" % str(e)
     else:

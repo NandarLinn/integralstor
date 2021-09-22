@@ -25,7 +25,7 @@ def main():
         if err:
             raise Exception(err)
 
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         logger.log_or_print('Error exporting old audits: %s' %
                             e, lg, level='critical')

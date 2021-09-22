@@ -26,7 +26,7 @@ def view_afp_volumes(request):
         return_dict["volumes_dict"] = volumes_dict
         template = "view_afp_volumes.html"
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'View AFP volumes'
         return_dict['tab'] = 'view_afp_volumes_tab'
@@ -50,7 +50,7 @@ def rename_afp_volume(request):
         if not volumes_dict and err:
             raise Exception(err)
 
-        if req_ret['current_name'] not in volumes_dict.keys():
+        if req_ret['current_name'] not in list(volumes_dict.keys()):
             raise Exception('Invalid volume specified. Please use the menus.')
 
         if request.method == "GET":
@@ -76,7 +76,7 @@ def rename_afp_volume(request):
             else:
                 return django.shortcuts.render_to_response('rename_afp_volume.html', return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Rename AFP volume'
         return_dict['tab'] = 'view_afp_volumes_tab'
@@ -97,7 +97,7 @@ def delete_afp_volume(request):
         if not volumes_dict and err:
             raise Exception(err)
 
-        if req_ret['name'] not in volumes_dict.keys():
+        if req_ret['name'] not in list(volumes_dict.keys()):
             raise Exception('Invalid volume specified. Please use the menus.')
 
         if request.method == "GET":
@@ -114,7 +114,7 @@ def delete_afp_volume(request):
             audit_str = 'Deleted AFP volume name "%s" with path %s' % (req_ret['name'], volumes_dict[req_ret['name']]['path'])
             audit.audit("delete_afp_volume", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_afp_volumes?ack=deleted')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove AFP volume '
         return_dict['tab'] = 'view_afp_volumes_tab'
@@ -179,7 +179,7 @@ def create_afp_volume(request):
                         cd['new_folder'], cd['path'])
                     audit.audit("create_dir", audit_str, request)
                     cd['path'] = '%s/%s' % (cd['path'], cd['new_folder'])
-                except Exception, e:
+                except Exception as e:
                     raise Exception('Error creating subfolder %s : %s' % (
                         cd['new_folder'], str(e)))
             result, err = afp.create_volume(cd['name'], cd['path'])
@@ -189,7 +189,7 @@ def create_afp_volume(request):
             audit_str = 'Created AFP volume named "%s" with path  %s' % (cd['name'], cd['path'])
             audit.audit("create_afp_volume", audit_str, request)
             return django.http.HttpResponseRedirect('/storage_access/view_afp_volumes?ack=created')
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create an AFP volume '
         return_dict['tab'] = 'view_afp_volumes_tab'

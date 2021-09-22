@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import login_required
 
-from views.urbackup import view_backup
+from .views.urbackup import view_backup
 
 
 urlpatterns = patterns('',

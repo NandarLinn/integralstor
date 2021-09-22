@@ -76,7 +76,7 @@ def main():
             for service_name in services:
                 services_management.update_service_status(service_name, 'stop')
 
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('check_os_filesystems')
         logger.log_or_print('Error checking OS filesystems : %s' %

@@ -25,7 +25,7 @@ def view_targets(request):
                 return_dict['ack_message'] = "ISCSI target successfully deleted"
 
         return django.shortcuts.render_to_response('view_iscsi_targets.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'ISCSI targets'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -69,7 +69,7 @@ def view_target(request):
         return_dict["target"] = target
 
         return django.shortcuts.render_to_response('view_iscsi_target.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'ISCSI target details'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -105,7 +105,7 @@ def create_iscsi_target(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_iscsi_target.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create an ISCSI target'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -141,7 +141,7 @@ def delete_iscsi_target(request):
             url = '/storage_access/view_iscsi_targets?ack=target_deleted'
             audit.audit("delete_iscsi_target", audit_str, request)
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove an ISCSI targets'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -195,7 +195,7 @@ def create_iscsi_lun(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_iscsi_lun.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create an ISCSI LUN'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -234,7 +234,7 @@ def delete_iscsi_lun(request):
             url = '/storage_access/view_iscsi_target?name=%s&ack=lun_deleted' % target_name
             audit.audit("delete_iscsi_lun", audit_str, request)
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove an ISCSI LUN'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -295,7 +295,7 @@ def create_iscsi_user_authentication(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_iscsi_target_user.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Add ISCSI authentication user'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -346,7 +346,7 @@ def delete_iscsi_user_authentication(request):
             audit.audit("remove_iscsi_target_authentication",
                         audit_str, request)
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove ISCSI authentication user'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -401,7 +401,7 @@ def create_iscsi_acl(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("create_iscsi_acl.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Add ISCSI ACL'
         return_dict['tab'] = 'view_iscsi_targets_tab'
@@ -440,7 +440,7 @@ def delete_iscsi_acl(request):
             url = '/storage_access/view_iscsi_target?name=%s&ack=removed_acl' % target_name
             audit.audit("remove_iscsi_acl", audit_str, request)
             return django.http.HttpResponseRedirect(url)
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Remove ISCSI ACL'
         return_dict['tab'] = 'view_iscsi_targets_tab'

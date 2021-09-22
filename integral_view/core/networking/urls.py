@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.networking.views.networking_management import view_interfaces, view_interface, view_bond, update_interface_state, update_interface_address, delete_interface_connection, create_bond, delete_bond, view_hostname, update_hostname, view_dns_nameservers, update_dns_nameservers, delete_vlan, create_vlan

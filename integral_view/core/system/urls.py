@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 
 from integral_view.core.system.views.ntp_management import update_ntp_settings, view_ntp_settings, sync_ntp

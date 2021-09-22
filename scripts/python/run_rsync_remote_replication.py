@@ -24,7 +24,7 @@ def run_rsync_remote_replication(remote_replication_id):
             raise Exception(err)
 
 
-    except Exception, e:
+    except Exception as e:
         audit.audit("task_fail", "Did not initiate replication:\n%s - %s" % (fail_audit_str, e),
                     None, system_initiated=True)
         return False, 'Error adding rsync remote replication task: %s' % e
@@ -35,10 +35,10 @@ def run_rsync_remote_replication(remote_replication_id):
 if __name__ == '__main__':
     # print sys.argv
     if len(sys.argv) != 2:
-        print 'Usage : python run_rsync_remote_replication.py remote_replication_id'
+        print('Usage : python run_rsync_remote_replication.py remote_replication_id')
         sys.exit(-1)
     ret, err = run_rsync_remote_replication(sys.argv[1])
-    print ret, err
+    print((ret, err))
     if err:
         sys.exit(-1)
     sys.exit(0)

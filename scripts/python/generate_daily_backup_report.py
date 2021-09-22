@@ -35,7 +35,7 @@ def main():
         if err:
             raise Exception(err)
 
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         lock.release_lock('generate_backup_report')
         logger.log_or_print('Error generating IntegralSTOR backup report: %s' %

@@ -34,14 +34,14 @@ def main():
             ret, err = alerts.record_alerts(alert_list)
             if err:
                 raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         return None, "Error recording PSU alert : %s" % str(e)
     else:
 	return True, None
 
 if __name__ == "__main__":
     ret = main()
-    print ret
+    print(ret)
     if ret is not None:
         sys.exit(1)
     else:

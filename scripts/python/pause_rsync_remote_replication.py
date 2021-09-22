@@ -30,7 +30,7 @@ def pause_rsync_remote_replication(remote_replication_id):
 
             audit.audit("stop_background_task",
                         audit_str, None, system_initiated=True )
-    except Exception, e:
+    except Exception as e:
         return False, 'Error pausing rsync remote replication task: %s' % e
     else:
         return True, None
@@ -39,10 +39,10 @@ def pause_rsync_remote_replication(remote_replication_id):
 if __name__ == '__main__':
     # print sys.argv
     if len(sys.argv) != 2:
-        print 'Usage : python pause_rsync_remote_replication.py remote_replication_id'
+        print('Usage : python pause_rsync_remote_replication.py remote_replication_id')
         sys.exit(-1)
     ret, err = pause_rsync_remote_replication(sys.argv[1])
-    print ret, err
+    print((ret, err))
     if err:
         sys.exit(-1)
     sys.exit(0)

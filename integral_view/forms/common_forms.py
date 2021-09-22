@@ -18,7 +18,7 @@ class MultipleEmailField(forms.CharField):
                     raise Exception('Invalid email address.')
             else:
                 raise Exception('Invalid email address.')
-        except Exception, e:
+        except Exception as e:
             return False, 'Error validating email address : %s' % str(e)
         else:
             return True, None

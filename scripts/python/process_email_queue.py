@@ -30,7 +30,7 @@ def main():
         ret, err = mail.process_email_queue()
         if err:
             raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         # print str(e)
         logger.log_or_print('Error processing email queue: %s' %
                             e, lg, level='critical')

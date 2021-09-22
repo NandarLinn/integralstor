@@ -1,5 +1,5 @@
-from django.conf.urls import patterns, include, url
-
+from django.conf.urls import include, url
+#from django.conf.urls.defaults import *
 from django.contrib.auth.decorators import login_required
 
 # Uncomment the next two lines to enable the admin:
@@ -11,10 +11,10 @@ from integralstor import config
 applications, err = config.get_applications_config()
 app_patterns = []
 if applications:
-    for app_tag in applications.keys():
+    for app_tag in list(applications.keys()):
         try:
             app_patterns.append(url(r'^applications/%s/'%app_tag, include('integral_view.applications.%s.urls'%app_tag)))
-        except Exception, e:
+        except Exception as e:
             pass
 
 urlpatterns = [

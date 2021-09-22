@@ -39,7 +39,7 @@ def view_email_settings(request):
         if 'sent_mail' in ret:
             return_dict["sent_mail"] = ret['sent_mail']
         return django.shortcuts.render_to_response('view_email_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View email notification settings'
         return_dict['tab'] = 'email_tab'
@@ -86,7 +86,7 @@ def update_email_settings(request):
                     return django.http.HttpResponseRedirect("/system/view_email_settings?ack=saved&err=%s" % err)
         return_dict["form"] = form
         return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Change email notification settings'
         return_dict['tab'] = 'email_tab'
@@ -110,7 +110,7 @@ def view_https_mode(request):
 
         return_dict['port'] = mode['port']
         return django.shortcuts.render_to_response('view_https_mode.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Integralview access mode'
         return_dict['tab'] = 'system_info_tab'
@@ -182,7 +182,7 @@ def update_https_mode(request):
             raise Exception(err)
         return django.http.HttpResponseRedirect(redirect_url)
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Modify Integralview access mode'
         return_dict['tab'] = 'system_info_tab'
@@ -216,7 +216,7 @@ def reboot_or_shutdown(request):
             elif do == 'shutdown':
                 command.execute_with_rc('shutdown -h +%d' % minutes_to_wait)
             return django.shortcuts.render_to_response("reboot_or_shutdown_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Reboot or Shutdown Failure'
         return_dict['tab'] = 'reboot_tab'
@@ -240,7 +240,7 @@ def flag_node(request):
             client = salt.client.LocalClient()
             ret = client.cmd(node_name, 'cmd.run', [
                              'ipmitool chassis identify %s' % (blink_time)])
-            print ret
+            print(ret)
             if ret[node_name] == 'Chassis identify interval: %s seconds' % (blink_time):
                 return django.http.HttpResponse("Success")
             else:
@@ -254,7 +254,7 @@ def flag_node(request):
                 return django.http.HttpResponse("Success")
             else:
                 raise Exception("")
-    except Exception, e:
+    except Exception as e:
         return django.http.HttpResponse("Error")
 
 def access_shell(request):
@@ -269,7 +269,7 @@ def access_shell(request):
             raise Exception(
                 "Shell Service is not running. Start the service and visit the page again")
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Shell Access'
         return_dict['tab'] = 'shell_tab'
@@ -314,7 +314,7 @@ def update_manifest(request):
             audit.audit('update_manifest',
                         audit_str, request)
             return django.http.HttpResponseRedirect("/system/view_system_info/")
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Reload system configuration'
         return_dict['tab'] = 'system_info_tab'
@@ -349,7 +349,7 @@ def update_org_info(request):
             audit.audit('update_org_info',
                         audit_str, request)
             return django.http.HttpResponseRedirect("/system/view_system_info?ack=update_org_info_ok")
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = "Update organization's information"
         return_dict['tab'] = 'system_info_tab'
@@ -415,7 +415,7 @@ def view_system_info(request):
             return_dict['frm'] = frm
         return_dict['node'] = si
         return django.shortcuts.render_to_response("view_system_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'System configuration'
         return_dict['tab'] = 'node_info_tab'
@@ -471,7 +471,7 @@ def reset_to_factory_defaults(request):
                 if 'conf' not in req_ret:
                     # No confirmation yet so process the form
                     selected_components = []
-                    for key in cd.keys():
+                    for key in list(cd.keys()):
                         if cd[key]:
                             selected_components.append(
                                 component_descriptions[key])
@@ -486,7 +486,7 @@ def reset_to_factory_defaults(request):
                     success_list = []
                     failed_list = []
                     error_dict = {}
-                    for key in cd.keys():
+                    for key in list(cd.keys()):
                         result = False
                         if not cd[key]:
                             continue
@@ -591,7 +591,7 @@ def reset_to_factory_defaults(request):
                 return_dict['form'] = form
                 return django.shortcuts.render_to_response('reset_to_factory_defaults.html', return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict["base_template"] = 'system_base.html'
         return_dict['tab'] = 'system_info_tab'
         return_dict['page_title'] = 'Reset to factory defaults'
@@ -658,7 +658,7 @@ def update_system_date_time(request):
             else:
                 return_dict["form"] = form
                 return django.shortcuts.render_to_response("update_system_date_time.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict["base_template"] = 'system_base.html'
         return_dict['tab'] = 'system_info_tab'
         return_dict['page_title'] = 'Update system and hardware date and time'
@@ -704,7 +704,7 @@ def download_sys_info(request):
                             os.path.join(dirname, filename))
                         arcname = absname[len(abs_src) + 1:]
                         zf.write(absname, arcname)
-            for key, value in upload_download_logs.iteritems():
+            for key, value in list(upload_download_logs.items()):
                 if os.path.isfile(value):
                     zf.write(value, key)
             zf.close()
@@ -732,7 +732,7 @@ def _handle_uploaded_file(f):
         with open('/tmp/upload.zip', 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error processing upload file : %s' % str(e)
     else:
         return True, None
@@ -743,7 +743,7 @@ def _copy_and_overwrite(from_path, to_path):
         if os.path.exists(to_path):
             shutil.rmtree(to_path)
         shutil.copytree(from_path, to_path)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error copying/overwriting directory : %s' % str(e)
     else:
         return True, None
@@ -752,7 +752,7 @@ def _copy_and_overwrite(from_path, to_path):
 def _copy_file_and_overwrite(from_path, to_path):
     try:
         shutil.copyfile(from_path, to_path)
-    except Exception, e:
+    except Exception as e:
         return False, 'Error copying/overwriting file : %s' % str(e)
     else:
         return True, None
@@ -815,7 +815,7 @@ def upload_sys_info(request):
                                 if err:
                                     raise Exception(err)
                 # print 'users - ', users
-            for key, value in upload_download_logs.iteritems():
+            for key, value in list(upload_download_logs.items()):
                 if key and os.path.isfile("/tmp/upload_system_config/" + key):
                     # print 'overwriting ', "/tmp/upload_system_config/%s"%key,
                     # 'to ', value
@@ -846,7 +846,7 @@ def upload_sys_info(request):
             form = common_forms.FileUploadForm()
             return_dict["form"] = form
             return django.shortcuts.render_to_response("upload_sys_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         audit_str = 'Upload of an external system configuration failed : %s.' % str(
             e)
         audit.audit('upload_configuration',

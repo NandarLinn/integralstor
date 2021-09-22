@@ -157,7 +157,7 @@ class CreateRouteForm(forms.Form):
         super(CreateRouteForm, self).__init__(*args, **kwargs)
         ch = []
         interfaces, err = networking.get_interfaces()
-        for key, value in interfaces.iteritems():
+        for key, value in list(interfaces.items()):
             # print value['addresses']['AF_INET']
             # check if the interface has an ip address assigned to it ?
             if (value['up_status'] == 'up') and ('AF_INET' in value['addresses']):

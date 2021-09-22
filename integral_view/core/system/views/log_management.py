@@ -28,7 +28,7 @@ def view_audits(request):
             raise Exception(err)
         return_dict["audit_list"] = al
         return django.shortcuts.render_to_response('view_audit_trail.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Audit trail'
         return_dict['tab'] = 'view_logs_tab'
@@ -53,7 +53,7 @@ def view_hardware_logs(request):
             if logs_dict:
                 return_dict['logs_dict'] = logs_dict
         return django.shortcuts.render_to_response('view_hardware_logs.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View and download logs'
         return_dict['tab'] = 'logs_tab'
@@ -122,7 +122,7 @@ def download_log(request):
                                 raise Exception(err)
                             if not logs_dict:
                                 raise Exception('No logs detected!')
-                            for timestamp, log_list in logs_dict.items():
+                            for timestamp, log_list in list(logs_dict.items()):
                                 for log in log_list:
                                     response.write('Time : %s\n' %
                                                    log['date_time'])
@@ -173,7 +173,7 @@ def download_log(request):
         # either a get or an invalid form so send back form
         return_dict['form'] = form
         return django.shortcuts.render_to_response('download_log_form.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Download system logs'
         return_dict['tab'] = 'logs_tab'

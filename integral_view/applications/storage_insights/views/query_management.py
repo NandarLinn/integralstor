@@ -46,7 +46,7 @@ def view_query_types(request):
                     url = '/applications/storage_insights/%s&scan_configuration_id=%d'%(q[2], scan_configuration_id)
                 else:
                     url = '/applications/storage_insights/%s?scan_configuration_id=%d'%(q[2], scan_configuration_id)
-                print url
+                print(url)
                 #raise Exception('a')
                 return django.http.HttpResponseRedirect(url)
             else:
@@ -59,7 +59,7 @@ def view_query_types(request):
                 raise Exception('Unknown query type. Please use the menus')
         return_dict['query_types'] = query_types
         return django.shortcuts.render_to_response('view_query_types.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Select Insight type '
         return_dict['tab'] = 'query_tab'
@@ -107,7 +107,7 @@ def view_general_query_results(request):
         return_dict['scan_configuration_id'] = scan_configuration_id
         return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Storage Insights query'
         return_dict['tab'] = 'query_tab'
@@ -151,7 +151,7 @@ def view_files_by_extension(request):
             else:
                 return django.shortcuts.render_to_response("files_by_extension_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Storage Insights - Extension Counts'
         return_dict['tab'] = 'query_tab'
@@ -192,7 +192,7 @@ def find_files(request):
             else:
                 return django.shortcuts.render_to_response("find_files_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Storage Insights - Find files'
         return_dict['tab'] = 'query_tab'
@@ -233,7 +233,7 @@ def download_file(request):
             zf_name)
 
         return response
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Download file'
         return_dict['tab'] = 'query_tab'
@@ -322,7 +322,7 @@ def view_dashboard(request):
         return_dict['num_active_configurations'] = num_active_configurations
         return_dict['num_configurations'] = num_configurations
         return django.shortcuts.render_to_response('view_storage_insights_dashboard.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Storage Insights dashboard'
         return_dict['tab'] = 'dashboard_tab'

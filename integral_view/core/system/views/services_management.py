@@ -2,7 +2,7 @@ import django
 import django.template
 import os
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from integralstor import local_users, audit, services_management
 
@@ -23,7 +23,7 @@ def view_services(request):
                 return_dict['ack_message'] = "Service start failed"
         if 'service_change_status' in request.GET:
             if request.GET['service_change_status'] != 'none':
-                return_dict['ack_message'] = 'Service status change initiated. Output : %s' % urllib.quote(
+                return_dict['ack_message'] = 'Service status change initiated. Output : %s' % urllib.parse.quote(
                     request.GET['service_change_status'])
             else:
                 return_dict['ack_message'] = 'Service status change initiated'
@@ -32,7 +32,7 @@ def view_services(request):
         if err:
             raise Exception(err)
         return django.shortcuts.render_to_response('view_services.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'System services'
         return_dict['tab'] = 'view_services_tab'
@@ -80,7 +80,7 @@ def update_service_status(request):
         else:
             return django.http.HttpResponseRedirect('/system/view_services?service_change_status=none')
 
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Modify system service state'
         return_dict['tab'] = 'view_services_tab'
@@ -90,8 +90,8 @@ def update_service_status(request):
 
 
 if __name__ == '__main__':
-    print _get_service_status(('ntp', 'NTP'))
-    print _get_service_status(('network', 'networking'))
-    print _get_service_status(('salt-minion', 'salt-minion'))
+    print((_get_service_status(('ntp', 'NTP'))))
+    print((_get_service_status(('network', 'networking'))))
+    print((_get_service_status(('salt-minion', 'salt-minion'))))
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

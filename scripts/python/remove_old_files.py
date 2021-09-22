@@ -42,7 +42,7 @@ def remove_old_files(lg=None, older_than_days=7):
                 else:
                     # print 'not removing %s'%f
                     pass
-    except Exception, e:
+    except Exception as e:
         logger.log_or_print('Error removing old files: %s' %
                             e, lg, level='critical')
         lock.release_lock('remove_old_files')
@@ -69,9 +69,9 @@ def main():
         ret, err = remove_old_files(lg, older_than_days)
         if err:
             raise Exception(err)
-    except Exception, e:
+    except Exception as e:
         str = "Error removing old files: %s" % e
-        print str
+        print(str)
         logger.log_or_print(str, lg, level='critical')
         sys.exit(-1)
     else:

@@ -30,7 +30,7 @@ def view_ntp_settings(request):
             if 'server_used' in req_ret:
                 return_dict["ack_message"] = 'One time ntp sync with server %s successfully completed.' % req_ret['server_used']
         return django.shortcuts.render_to_response('view_ntp_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View NTP settings'
         return_dict['tab'] = 'ntp_settings_tab'
@@ -78,7 +78,7 @@ def update_ntp_settings(request):
                 url = "update_ntp_settings.html"
         return_dict["form"] = form
         return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Modify NTP notifications settings'
         return_dict['tab'] = 'ntp_settings_tab'
@@ -101,7 +101,7 @@ def sync_ntp(request):
                 return django.http.HttpResponseRedirect("/system/view_ntp_settings?ack=ntp_synced&server_used=%s" % output['server_used'])
             else:
                 raise Exception("NTP sync failed")
-    except Exception, e:
+    except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View NTP settings'
         return_dict['tab'] = 'ntp_settings_tab'
