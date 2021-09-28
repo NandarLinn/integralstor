@@ -2,7 +2,7 @@ git clone ..../integralstor.git
 
 sudo rm -rf /opt/integralstor/integralstor
 sudo cp -r integralstor/ /opt/integralstor/
-sudo cp -r integralstor/site-packages/ /usr/local/lib/python3.5/dist-packages/
+sudo cp -r integralstor/site-packages/integralstor /usr/local/lib/python3.5/dist-packages/
 
 install packages
 cd integralstor/ 
