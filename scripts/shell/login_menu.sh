@@ -142,37 +142,37 @@ update_password() {
 }
 
 configure_network_interface(){
-  sudo python /opt/integralstor/integralstor/scripts/python/configure_networking.py interface
+  sudo python3 /opt/integralstor/integralstor/scripts/python/configure_networking.py interface
   pause
 }
 
 create_nic_bond(){
-  sudo python /opt/integralstor/integralstor/scripts/python/create_nic_bond.py 
+  sudo python3 /opt/integralstor/integralstor/scripts/python/create_nic_bond.py 
   pause
 }
 
 remove_nic_bond(){
-  sudo python /opt/integralstor/integralstor/scripts/python/remove_nic_bond.py 
+  sudo python3 /opt/integralstor/integralstor/scripts/python/remove_nic_bond.py 
   pause
 }
 
 view_services_status(){
-  sudo python /opt/integralstor/integralstor/scripts/python/display_services_status.py
+  sudo python3 /opt/integralstor/integralstor/scripts/python/display_services_status.py
   pause
 }
 view_node_config(){
-  sudo python /opt/integralstor/integralstor/scripts/python/display_node_config.py
+  sudo python3 /opt/integralstor/integralstor/scripts/python/display_node_config.py
   pause
 }
 
 generate_manifest_and_status(){
-  sudo python /opt/integralstor/integralstor/scripts/python/generate_manifest.py
-  sudo python /opt/integralstor/integralstor/scripts/python/generate_status.py
+  sudo python3 /opt/integralstor/integralstor/scripts/python/generate_manifest.py
+  sudo python3 /opt/integralstor/integralstor/scripts/python/generate_status.py
   pause
 }
 
 usb_utils(){
-  sudo python /opt/integralstor/integralstor/scripts/python/usb_utils.py
+  sudo python3 /opt/integralstor/integralstor/scripts/python/usb_utils.py
   pause
 }
 

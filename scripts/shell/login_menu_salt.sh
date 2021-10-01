@@ -6,22 +6,22 @@ pause(){
  
 configure_network_interface(){
   #echo "configure networking called"
-  python /opt/integralstor/integralstor/scripts/python/configure_networking.py interface
+  python3 /opt/integralstor/integralstor/scripts/python/configure_networking.py interface
 }
 
 
 view_node_status(){
-  python /opt/integralstor/integralstor/scripts/python/display_node_status.py
+  python3 /opt/integralstor/integralstor/scripts/python/display_node_status.py
   pause
 }
 view_node_config(){
-  python /opt/integralstor/integralstor/scripts/python/display_node_config.py
+  python3 /opt/integralstor/integralstor/scripts/python/display_node_config.py
   pause
 }
 
 
 remove_minions(){
-  python /opt/integralstor/integralstor/scripts/python/clear_minions.py
+  python3 /opt/integralstor/integralstor/scripts/python/clear_minions.py
   pause
 }
 
