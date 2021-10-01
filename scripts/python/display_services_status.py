@@ -20,8 +20,9 @@ def display_services_status():
 
         while True:
             print()
-            check = eval(input(
-                "To view detailed status press 'y', otherwise, press any other key to exit: "))
+            check = input(
+                "To view detailed status press 'y', otherwise, press any other key to exit: ")
+
             if check.lower() == 'y':
                 os.system('clear')
                 for name, service in list(services_d.items()):
