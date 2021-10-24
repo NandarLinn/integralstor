@@ -302,10 +302,10 @@ if [ ! -e /etc/systemd/system/uwsginew.service ]; then
 	cp $services_dir/uwsginew.service /etc/systemd/system/
 fi
 
-if [ ! -e /etc/systemd/system/multi-user.target.wants/uwsginew.service ]; then
-	echo "/etc/systemd/system/multi-user.target.wants/uwsginew.service not present, copying now.."  
-	cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
-fi
+#if [ ! -e /etc/systemd/system/multi-user.target.wants/uwsginew.service ]; then
+#	echo "/etc/systemd/system/multi-user.target.wants/uwsginew.service not present, copying now.."  
+#	cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
+#fi
 
 # ramdisk
 

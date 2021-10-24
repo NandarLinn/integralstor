@@ -47,7 +47,7 @@ cp $services_dir/rsync /etc/xinetd.d/rsync
 mkdir -p /etc/uwsgi/vassals
 cp $services_dir/integral_view_uwsgi.ini /etc/uwsgi/vassals/
 cp $services_dir/uwsginew.service /etc/systemd/system/
-cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
+#cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
 
 # ramdisk
 touch $services_dir/ramdisks.conf
@@ -94,24 +94,24 @@ cp $services_dir/exports /etc/
 mv /etc/samba/smb.conf /etc/samba/BAK.smb.conf
 cp $services_dir/smb.conf /etc/samba/
 
-#
-## Start and enable services
-#systemctl start rpcbind &> /dev/null; systemctl enable rpcbind &> /dev/null
-#systemctl start nfs-server &> /dev/null; systemctl enable nfs-server &> /dev/null
-#systemctl start winbind &> /dev/null; systemctl enable winbind &> /dev/null
-#systemctl start smb &> /dev/null; systemctl enable smb &> /dev/null
-#systemctl start tgtd &> /dev/null; systemctl enable tgtd &> /dev/null
-#systemctl start ntpd &> /dev/null; systemctl enable ntpd &> /dev/null
-#systemctl start crond &> /dev/null; systemctl enable crond &> /dev/null
-#systemctl start ramdisk &> /dev/null; systemctl enable ramdisk &> /dev/null
-#systemctl start vsftpd &> /dev/null; systemctl enable vsftpd &> /dev/null
-#systemctl start shellinaboxd &> /dev/null; systemctl enable shellinaboxd &> /dev/null
-#systemctl start uwsginew &> /dev/null; systemctl enable uwsginew &> /dev/null
-#systemctl start nginx &> /dev/null; systemctl enable nginx &> /dev/null
-#systemctl stop first-boot &> /dev/null; systemctl disable first-boot &> /dev/null
-#systemctl restart zed &> /dev/null
-#systemctl preset zfs.target zfs-import-cache zfs-import-scan zfs-mount zfs-share zfs-zed &> /dev/null
-#
-#systemctl daemon-reload
-#udevadm control --reload-rules
+
+# Start and enable services
+systemctl start rpcbind &> /dev/null; systemctl enable rpcbind &> /dev/null
+systemctl start nfs-server &> /dev/null; systemctl enable nfs-server &> /dev/null
+systemctl start winbind &> /dev/null; systemctl enable winbind &> /dev/null
+systemctl start smb &> /dev/null; systemctl enable smb &> /dev/null
+systemctl start tgtd &> /dev/null; systemctl enable tgtd &> /dev/null
+systemctl start ntpd &> /dev/null; systemctl enable ntpd &> /dev/null
+systemctl start crond &> /dev/null; systemctl enable crond &> /dev/null
+systemctl start ramdisk &> /dev/null; systemctl enable ramdisk &> /dev/null
+systemctl start vsftpd &> /dev/null; systemctl enable vsftpd &> /dev/null
+systemctl start shellinaboxd &> /dev/null; systemctl enable shellinaboxd &> /dev/null
+systemctl start uwsginew &> /dev/null; systemctl enable uwsginew &> /dev/null
+systemctl start nginx &> /dev/null; systemctl enable nginx &> /dev/null
+systemctl stop first-boot &> /dev/null; systemctl disable first-boot &> /dev/null
+systemctl restart zed &> /dev/null
+systemctl preset zfs.target zfs-import-cache zfs-import-scan zfs-mount zfs-share zfs-zed &> /dev/null
+
+systemctl daemon-reload
+udevadm control --reload-rules
 
