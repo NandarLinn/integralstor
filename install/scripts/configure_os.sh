@@ -4,18 +4,18 @@ hardware_vendor=""
 [ -n "$1" ] && hardware_vendor=$1
 
 # Add users and groups
-groupadd integralstor -g 1000
-useradd integralstor -g 1000
-useradd replicator -g 1000
+groupadd integralstor -g 1000 
+useradd -g 1000 -m --shell /bin/bash integralstor
+useradd -g 1000 -m --shell /bin/bash replicator
 groupadd console -g 1002
-useradd console -g 1002
-groupadd nagios -g 1003
-useradd nagios -g 1003
+useradd -g 1002 -m --shell /bin/bash console
+groupadd nagios -g 1003 
+useradd nagios -g 1003 
 
-echo "integralstor123" | passwd --stdin integralstor
-echo "replicator123" | passwd --stdin replicator
-echo "console123" | passwd --stdin console
-echo "nagios123" | passwd --stdin nagios
+echo -e "integralstor123\nintegralstor123" | passwd integralstor
+echo -e "replicator123\nreplicator123" | passwd replicator
+echo -e "console123\nconsole123" | passwd console
+echo -e "nagios123\nnagios123" | passwd nagios
 echo "integralstor    ALL=(ALL)    ALL" >> /etc/sudoers
 echo "replicator    ALL=(ALL)    NOPASSWD: /usr/sbin/zfs,/usr/bin/rsync,/bin/rsync,/usr/bin/ssh" >> /etc/sudoers
 echo "console    ALL=(ALL)    NOPASSWD: ALL" >> /etc/sudoers
@@ -36,18 +36,17 @@ sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 
 # Link site-packages with python libraries dir
-#ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/lib/python2.7/site-packages/integralstor
-ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.5/site-packages/integralstor
+ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/site-packages/integralstor
 
 
 # To force NFS users to come in as nfsuser, create nfsuser
 nfs_usr='nfs-local'
 nfs_grp='nfs-local'
-nfs_usr=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
-nfs_grp=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
-groupadd "$nfs_grp" -g 1500
-useradd "$nfs_usr" -g 1500 -u 1500
-echo "$nfs_usr""123" | passwd --stdin "$nfs_usr"
+nfs_usr=`python -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
+nfs_grp=`python -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
+groupadd -g 1500 nfs-local
+useradd -g 1500 -u 1500 nfs-local
+echo -e  "nfs-local123\nnfs-local123" | passwd nfs-local
 
 
 # Create required Integralstor specific directories

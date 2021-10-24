@@ -1,5 +1,4 @@
 #!/bin/bash
-
 pause(){
   read -p "Press [Enter] key to continue..." key
 }
@@ -113,22 +112,22 @@ update_password() {
   # If an argument is passed to specify an user, changes password for that user
   # else changes the password for the loggen in user
   clear
-  if [ -z $1 ]
+  if [ -z "$1" ]
   then
-    usr_name=`id -nu`
-  elif [ -n $1 ]
+   usr_name=$(id -nu)
+  elif [ -n "$1" ]
   then
-    usr_name=$1
+   usr_name="$1"
   fi
   echo 
-  echo "You are logged in as '`id -nu`'"
+  echo "You are logged in as '$(id -nui)'"
   echo
   read -p "Change password of user '$usr_name'? (y/n) -  " is_change
   echo 
-  case $is_change in
+  case "$is_change" in
     y|Y)
       echo
-      sudo passwd $usr_name
+      sudo passwd "$usr_name"
       echo
       pause
       ;;
@@ -244,8 +243,8 @@ read_input(){
   esac
 }
  
-user_name=`id -un`
-if [[ ("$user_name" != "root") && ("$user_name" != "integralstor") && ("$user_name" != "replicator")]]
+user_name=$(id -un)
+if [[ ( "$user_name" != "root" ) && ( "$user_name" != "integralstor" ) && ( "$user_name" != "replicator" ) ]]
 then
   trap '' SIGINT SIGQUIT SIGTSTP
   while true

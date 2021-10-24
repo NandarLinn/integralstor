@@ -47,7 +47,7 @@ cp $services_dir/rsync /etc/xinetd.d/rsync
 mkdir -p /etc/uwsgi/vassals
 cp $services_dir/integral_view_uwsgi.ini /etc/uwsgi/vassals/
 cp $services_dir/uwsginew.service /etc/systemd/system/
-cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
+#cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
 
 # ramdisk
 touch $services_dir/ramdisks.conf

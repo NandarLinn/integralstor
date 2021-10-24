@@ -3,9 +3,9 @@ Description=uWSGI instance to serve IntegralView
 
 [Service]
 Type=forking
-ExecStartPre=-/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown root:nginx /run/uwsgi'
-ExecStart=/usr/bin/bash -c 'cd /opt/integralstor/integralstor/integral_view; /usr/bin/uwsgi --emperor /etc/uwsgi/vassals --uid root --gid root >/var/log/integralstor/logs/scripts/integral_view.log 2>&1 &'
-ExecStop=/usr/bin/bash -c '/usr/bin/pkill /usr/bin/uwsgi; /usr/bin/pkill uwsgi'
+ExecStartPre=bash -c 'mkdir -p /run/uwsgi; chown root:www-data /run/uwsgi'
+ExecStart=bash -c 'cd /opt/integralstor/integralstor/integral_view; uwsgi --emperor /etc/uwsgi/vassals --uid root --gid root >/var/log/integralstor/logs/scripts/integral_view.log 2>&1 &'
+ExecStop=bash -c 'pkill uwsgi; pkill uwsgi; killall -9 uwsgi'
 
 [Install]
 WantedBy=multi-user.target

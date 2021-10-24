@@ -15,21 +15,21 @@ do
 		if [ $user == "integralstor" ];then
 			useradd integralstor -g 1000
 			groupadd integralstor -g 1000
-			echo "integralstor123" | passwd --stdin integralstor
+			echo "integralstor123\nintegralstor123" | passwd integralstor
 
 		elif [ $user == "replicator" ];then
 			useradd replicator -g 1000
-			echo "replicator123" | passwd --stdin replicator
+			echo "replicator123\nreplicator123" | passwd replicator
 
 		elif [ $user == "console" ];then
 			useradd console -g 1002
 			groupadd console -g 1002
-			echo "console123" | passwd --stdin console
+			echo "console123\nconsole123" | passwd console
  
 		elif [ $user == "nagios" ];then
 			useradd nagios -g 1003
 			groupadd nagios -g 1003
-			echo "nagios123" | passwd --stdin nagios
+			echo "nagios123\nnagios123" | passwd nagios
 		fi	
 	fi
 	done
@@ -58,13 +58,12 @@ echo "Setting Network Manager control over interfaces.."
 sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-eno*
 sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-enp*
 sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-em*
-sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-eth*
+
 # Avoid tty for clean ZFS remote replication process
 sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
-# Check and move integralstor site-packages to /usr/lib/python2.7/site-packages/
-#LIB_PATH="/usr/lib/python2.7/site-packages/integralstor"
-LIB_PATH="/usr/local/lib/python3.5/site-packages/integralstor"
+# Check and move integralstor site-packages to /usr/lib/python3.8/site-packages/
+LIB_PATH="/usr/local/lib/python3.8/site-packages/integralstor"
 
 echo "Checking if integralstor site-packages are in place.."
 
@@ -72,20 +71,20 @@ if [ -e $LIB_PATH ];then
 	echo "Checked - OK"
 else
         echo "$LIB_PATH not in place, creating symlink.."
-	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.5/site-packages/integralstor
+	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/site-packages/integralstor
 fi
 
 # Add nfs-local user and group if not present
 echo "Checking for nfs-local user and group"
-nfs_usr=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
-nfs_grp=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
+nfs_usr=`python -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
+nfs_grp=`python -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
 
 if id "$nfs_usr" > /dev/null 2>&1;then
         echo "nfs user - OK"
 else
         echo "nfs user not present, creating.."
         useradd "$nfs_usr" -g 1500 -u 1500
-        echo "$nfs_usr""123" | passwd --stdin "$nfs_usr"
+        echo "$nfs_usr""123"; echo "$nfs_usr""123" | passwd "$nfs_usr"
 fi
 
 if grep -q $nfs_grp /etc/group;then
@@ -303,10 +302,10 @@ if [ ! -e /etc/systemd/system/uwsginew.service ]; then
 	cp $services_dir/uwsginew.service /etc/systemd/system/
 fi
 
-if [ ! -e /etc/systemd/system/multi-user.target.wants/uwsginew.service ]; then
-	echo "/etc/systemd/system/multi-user.target.wants/uwsginew.service not present, copying now.."  
-	cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
-fi
+#if [ ! -e /etc/systemd/system/multi-user.target.wants/uwsginew.service ]; then
+#	echo "/etc/systemd/system/multi-user.target.wants/uwsginew.service not present, copying now.."  
+#	cp $services_dir/uwsginew.service /etc/systemd/system/multi-user.target.wants/
+#fi
 
 # ramdisk
 
@@ -426,3 +425,4 @@ systemctl preset zfs.target zfs-import-cache zfs-import-scan zfs-mount zfs-share
 
 systemctl daemon-reload
 udevadm control --reload-rules
+
