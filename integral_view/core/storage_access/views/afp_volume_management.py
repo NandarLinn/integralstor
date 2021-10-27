@@ -25,14 +25,14 @@ def view_afp_volumes(request):
                 return_dict['ack_message'] = "AFP volume successfully deleted"
         return_dict["volumes_dict"] = volumes_dict
         template = "view_afp_volumes.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'View AFP volumes'
         return_dict['tab'] = 'view_afp_volumes_tab'
         return_dict["error"] = 'Error loading AFP volumes'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def rename_afp_volume(request):
@@ -61,7 +61,7 @@ def rename_afp_volume(request):
             return_dict['form'] = form
             return_dict['current_name'] = req_ret['current_name']
             return_dict['path'] = volumes_dict[req_ret['current_name']]['path']
-            return django.shortcuts.render_to_response('rename_afp_volume.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'rename_afp_volume.html', return_dict)
         else:
             form = afp_volumes_forms.RenameVolumeForm(request.POST)
             return_dict["form"] = form
@@ -74,7 +74,7 @@ def rename_afp_volume(request):
                 audit.audit("rename_afp_volume", audit_str, request)
                 return django.http.HttpResponseRedirect('/storage_access/view_afp_volumes?ack=renamed')
             else:
-                return django.shortcuts.render_to_response('rename_afp_volume.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'rename_afp_volume.html', return_dict)
 
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
@@ -82,7 +82,7 @@ def rename_afp_volume(request):
         return_dict['tab'] = 'view_afp_volumes_tab'
         return_dict["error"] = 'Error renaming AFP volume'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_afp_volume(request):
@@ -105,7 +105,7 @@ def delete_afp_volume(request):
             name = request.GET["name"]
             return_dict["name"] = name
             return_dict["path"] = volumes_dict[name]['path']
-            return django.shortcuts.render_to_response("delete_afp_volume_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_afp_volume_conf.html", return_dict)
         else:
             result, err = afp.delete_volume(req_ret['name'])
             if err:
@@ -120,7 +120,7 @@ def delete_afp_volume(request):
         return_dict['tab'] = 'view_afp_volumes_tab'
         return_dict["error"] = 'Error removing AFP volume'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 def create_afp_volume(request):
     return_dict = {}
@@ -164,13 +164,13 @@ def create_afp_volume(request):
             form = afp_volumes_forms.CreateVolumeForm(
                 initial=initial, dataset_list=ds_list)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_afp_volume.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_afp_volume.html", return_dict)
         else:
             form = afp_volumes_forms.CreateVolumeForm(
                 request.POST, dataset_list=ds_list)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_afp_volume.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_afp_volume.html", return_dict)
             cd = form.cleaned_data
             if 'new_folder' in cd and cd['new_folder']:
                 try:
@@ -195,6 +195,6 @@ def create_afp_volume(request):
         return_dict['tab'] = 'view_afp_volumes_tab'
         return_dict["error"] = 'Error creating an AFP volume '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

@@ -25,7 +25,7 @@ def create_rsync_share(request):
         if request.method == "GET":
             form = rsync_forms.CreateShareForm(dataset_list=ds_list)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_rsync_share.html", return_dict)
         else:
             form = rsync_forms.CreateShareForm(
                 request.POST, dataset_list=ds_list)
@@ -47,7 +47,7 @@ def create_rsync_share(request):
             os.chown(path, owner_uid, owner_gid)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_rsync_share.html", return_dict)
             cd = form.cleaned_data
             result, err = rsync.create_rsync_share(
                 cd["name"], cd["path"], cd["comment"], cd["browsable"], cd["readonly"], "integralstor", "integralstor")
@@ -63,7 +63,7 @@ def create_rsync_share(request):
         return_dict['tab'] = 'view_rsync_shares_tab'
         return_dict["error"] = 'Error creating RSync shares'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_rsync_share(request):
@@ -88,7 +88,7 @@ def update_rsync_share(request):
                 initial["browsable"] = False
             form = rsync_forms.ShareForm(initial=initial)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response("update_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_rsync_share.html", return_dict)
         else:
             form = rsync_forms.ShareForm(request.POST)
             if form.is_valid():
@@ -107,14 +107,14 @@ def update_rsync_share(request):
                 return django.http.HttpResponseRedirect('/storage_access/view_rsync_shares/?ack=saved')
             else:
                 return_dict["form"] = form
-                return django.shortcuts.render_to_response("update_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_rsync_share.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync Share'
         return_dict['tab'] = 'view_rsync_shares_tab'
         return_dict["error"] = 'Error editing RSync shares'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_rsync_shares(request):
@@ -131,14 +131,14 @@ def view_rsync_shares(request):
         if err:
             raise Exception("Unable to load Rsync Shares")
         return_dict["shares"] = shares
-        return django.shortcuts.render_to_response("view_rsync_shares.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_rsync_shares.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'RSync shares'
         return_dict['tab'] = 'view_rsync_shares_tab'
         return_dict["error"] = 'Error loading RSync shares'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_rsync_share(request):
@@ -147,7 +147,7 @@ def delete_rsync_share(request):
         if request.method == "GET":
             name = request.GET.get("name")
             return_dict["name"] = name
-            return django.shortcuts.render_to_response("delete_rsync_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_rsync_share.html", return_dict)
         else:
             name = request.POST.get("name")
             delshare, err = rsync.delete_rsync_share(name)
@@ -162,6 +162,6 @@ def delete_rsync_share(request):
         return_dict['tab'] = 'view_rsync_shares_tab'
         return_dict["error"] = 'Error deleting RSync share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

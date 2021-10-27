@@ -25,14 +25,14 @@ def view_nfs_shares(request):
                 return_dict['ack_message'] = "NFS Export successfully deleted"
         return_dict["exports_list"] = exports_list
         template = "view_nfs_shares.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'NFS shares'
         return_dict['tab'] = 'view_nfs_shares_tab'
         return_dict["error"] = 'Error loading NFS shares'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_nfs_share(request):
@@ -57,14 +57,14 @@ def view_nfs_share(request):
             raise Exception("Requested share not found.")
 
         template = "view_nfs_share.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'View NFS share details'
         return_dict['tab'] = 'view_nfs_shares_tab'
         return_dict["error"] = 'Error viewing NFS share details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_nfs_share(request):
@@ -75,7 +75,7 @@ def delete_nfs_share(request):
             # Return the conf page
             path = request.GET["path"]
             return_dict["path"] = path
-            return django.shortcuts.render_to_response("delete_nfs_share_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_nfs_share_conf.html", return_dict)
         else:
             path = request.POST["path"]
             #logger.debug("Delete share request for name %s"%name)
@@ -92,7 +92,7 @@ def delete_nfs_share(request):
         return_dict['tab'] = 'view_nfs_shares_tab'
         return_dict["error"] = 'Error removing NFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_nfs_share(request):
@@ -124,13 +124,13 @@ def update_nfs_share(request):
                 initial['clients'] = ','.join(client_list)
             form = nfs_shares_forms.ShareForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_nfs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_nfs_share.html", return_dict)
         else:
             form = nfs_shares_forms.ShareForm(request.POST)
             path = request.POST["path"]
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_nfs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_nfs_share.html", return_dict)
             cd = form.cleaned_data
             result, err = nfs.save_share(cd)
             if err:
@@ -145,7 +145,7 @@ def update_nfs_share(request):
         return_dict['tab'] = 'view_nfs_shares_tab'
         return_dict["error"] = 'Error modifying a NFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_nfs_share(request):
@@ -190,13 +190,13 @@ def create_nfs_share(request):
             form = nfs_shares_forms.CreateShareForm(
                 initial=initial, dataset_list=ds_list)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_nfs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_nfs_share.html", return_dict)
         else:
             form = nfs_shares_forms.CreateShareForm(
                 request.POST, dataset_list=ds_list)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_nfs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_nfs_share.html", return_dict)
             cd = form.cleaned_data
             if 'new_folder' in cd and cd['new_folder']:
                 try:
@@ -221,6 +221,6 @@ def create_nfs_share(request):
         return_dict['tab'] = 'view_nfs_shares_tab'
         return_dict["error"] = 'Error creating a NFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

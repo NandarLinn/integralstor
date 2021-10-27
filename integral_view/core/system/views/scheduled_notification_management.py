@@ -30,14 +30,14 @@ def view_scheduled_notifications(request):
                     ent['recipient_list'] = enc['recipient_list']
 
         return_dict['ent_list'] = ent_list
-        return django.shortcuts.render_to_response("view_scheduled_notifications.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_scheduled_notifications.html", return_dict)
     except Exception as e:
         return_dict["page_title"] = 'View scheduled notifications'
         return_dict['tab'] = 'scheduled_notifications_tab'
         return_dict["error"] = 'Error loading scheduled notifications list'
         return_dict['base_template'] = "system_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_scheduled_notification(request):
@@ -70,7 +70,7 @@ def create_scheduled_notification(request):
                     reference_notification_types=reference_table_entries['reference_notification_types'], reference_event_subtypes=reference_table_entries['reference_event_subtypes'])
                 template = 'create_report_notification.html'
             return_dict['form'] = form
-            return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, template, return_dict)
 
         elif request.method == "POST":
             scheduler = req_params['scheduler']
@@ -89,7 +89,7 @@ def create_scheduled_notification(request):
                 template = 'create_report_notification.html'
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, template, return_dict)
             cd = form.cleaned_data
 
             psp, err = config.get_python_scripts_path()
@@ -136,7 +136,7 @@ def create_scheduled_notification(request):
         return_dict["error"] = 'Error creating scheduled notification'
         return_dict['base_template'] = "system_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_scheduled_notification(request):
@@ -171,5 +171,5 @@ def delete_scheduled_notification(request):
         return_dict["error"] = 'Error removing scheduled notification'
         return_dict['base_template'] = "system_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 

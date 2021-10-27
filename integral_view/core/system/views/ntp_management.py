@@ -29,14 +29,14 @@ def view_ntp_settings(request):
         elif 'ack' in req_ret and req_ret['ack'] == 'ntp_synced':
             if 'server_used' in req_ret:
                 return_dict["ack_message"] = 'One time ntp sync with server %s successfully completed.' % req_ret['server_used']
-        return django.shortcuts.render_to_response('view_ntp_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_ntp_settings.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View NTP settings'
         return_dict['tab'] = 'ntp_settings_tab'
         return_dict["error"] = 'Error retrieving NTP settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 @login_required
@@ -77,14 +77,14 @@ def update_ntp_settings(request):
                 iv_logging.debug("Got invalid request to change NTP settings")
                 url = "update_ntp_settings.html"
         return_dict["form"] = form
-        return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, url, return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Modify NTP notifications settings'
         return_dict['tab'] = 'ntp_settings_tab'
         return_dict["error"] = 'Error modifying NTP notifications settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def sync_ntp(request):
@@ -107,7 +107,7 @@ def sync_ntp(request):
         return_dict['tab'] = 'ntp_settings_tab'
         return_dict["error"] = 'Error retrieving syncing with ntp servers'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

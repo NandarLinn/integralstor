@@ -28,14 +28,14 @@ def view_cifs_shares(request):
                     return_dict['ack_message'] = "Share successfully deleted"
             return_dict["shares_list"] = shares_list
             template = "view_cifs_shares.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'CIFS shares'
         return_dict['tab'] = 'view_cifs_shares_tab'
         return_dict["error"] = 'Error loading CIFS share list'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_cifs_share(request):
@@ -93,14 +93,14 @@ def view_cifs_share(request):
 
         template = 'view_cifs_share.html'
 
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'CIFS share details'
         return_dict['tab'] = 'view_cifs_shares_tab'
         return_dict["error"] = 'Error loading CIFS share details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_cifs_share(request):
@@ -154,7 +154,7 @@ def update_cifs_share(request):
             form = samba_shares_forms.EditShareForm(initial=initial)
 
             return_dict["form"] = form
-            return django.shortcuts.render_to_response('update_cifs_share.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_cifs_share.html', return_dict)
 
         else:
 
@@ -211,14 +211,14 @@ def update_cifs_share(request):
 
             else:
                 # Invalid form
-                return django.shortcuts.render_to_response('update_cifs_share.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_cifs_share.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify a CIFS share'
         return_dict['tab'] = 'view_cifs_shares_tab'
         return_dict["error"] = 'Error modifying CIFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_cifs_share(request):
@@ -231,7 +231,7 @@ def delete_cifs_share(request):
             name = request.GET["name"]
             return_dict["share_id"] = share_id
             return_dict["name"] = name
-            return django.shortcuts.render_to_response("delete_cifs_share_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_cifs_share_conf.html", return_dict)
         else:
             share_id = request.POST["share_id"]
             name = request.POST["name"]
@@ -252,7 +252,7 @@ def delete_cifs_share(request):
         return_dict['tab'] = 'view_cifs_shares_tab'
         return_dict["error"] = 'Error deleting a  CIFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_cifs_share(request):
@@ -306,7 +306,7 @@ def create_cifs_share(request):
                 dataset_list=ds_list, initial=initial)
             return_dict["form"] = form
 
-            return django.shortcuts.render_to_response("create_cifs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_cifs_share.html", return_dict)
         else:
             # Form submission so create
             form = samba_shares_forms.CreateShareForm(
@@ -319,7 +319,7 @@ def create_cifs_share(request):
                 path = cd["path"]
                 if not path:
                     return_dict["path_error"] = "Please select a dataset."
-                    return django.shortcuts.render_to_response("create_cifs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "create_cifs_share.html", return_dict)
                 if 'new_folder' in cd and cd['new_folder']:
                     try:
                         path = '%s/%s' % (cd['path'], cd['new_folder'])
@@ -390,14 +390,14 @@ def create_cifs_share(request):
                 audit.audit("create_cifs_share", audit_str, request)
                 return django.http.HttpResponseRedirect('/storage_access/view_cifs_shares?ack=created')
             else:
-                return django.shortcuts.render_to_response("create_cifs_share.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_cifs_share.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Create a CIFS share'
         return_dict['tab'] = 'view_cifs_shares_tab'
         return_dict["error"] = 'Error creating a CIFS share'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_auth_method(request):
@@ -409,16 +409,16 @@ def update_auth_method(request):
         return_dict["samba_global_dict"] = d
 
         if request.method == "GET":
-            return django.shortcuts.render_to_response('update_cifs_auth_method.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_cifs_auth_method.html', return_dict)
         else:
             # Save request
             if "auth_method" not in request.POST:
                 return_dict["error"] = "Please select an authentication method"
-                return django.shortcuts.render_to_response('update_cifs_auth_method.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_cifs_auth_method.html', return_dict)
             security = request.POST["auth_method"]
             if 'security' in d and security == d["security"]:
                 return_dict["error"] = "Selected authentication method is the same as before."
-                return django.shortcuts.render_to_response('update_cifs_auth_method.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_cifs_auth_method.html', return_dict)
 
             ret, err = cifs.update_auth_method(security)
             if err:
@@ -434,7 +434,7 @@ def update_auth_method(request):
         return_dict['tab'] = 'auth_server_settings_tab'
         return_dict["error"] = 'Error modifying CIFS authentication method'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_samba_server_settings(request):
@@ -450,14 +450,14 @@ def view_samba_server_settings(request):
             raise Exception(err)
         if 'ack' in ret and ret['ack'] == 'saved':
             return_dict["ack_message"] = "Information updated successfully"
-        return django.shortcuts.render_to_response('view_samba_server_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_samba_server_settings.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
         return_dict["page_title"] = 'Modify CIFS authentication settings'
         return_dict['tab'] = 'auth_server_settings_tab'
         return_dict["error"] = 'Error modifying CIFS authentication settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_samba_server_settings(request):
@@ -481,7 +481,7 @@ def update_samba_server_settings(request):
                 form = samba_shares_forms.AuthUsersSettingsForm(initial=ini)
             print('c')
             return_dict["form"] = form
-            return django.shortcuts.render_to_response('update_samba_server_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_samba_server_settings.html', return_dict)
         else:
             if "security" not in request.POST:
                 raise Exception(
@@ -536,7 +536,7 @@ def update_samba_server_settings(request):
                 if err:
                     raise Exception(err)
             else:
-                return django.shortcuts.render_to_response('update_samba_server_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_samba_server_settings.html', return_dict)
 
             audit_str = "Modified share authentication settings"
             audit.audit("modify_samba_settings", audit_str, request)
@@ -550,7 +550,7 @@ def update_samba_server_settings(request):
         return_dict['tab'] = 'auth_server_settings_tab'
         return_dict["error"] = 'Error modifying CIFS authentication settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

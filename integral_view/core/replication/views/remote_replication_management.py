@@ -51,14 +51,14 @@ def view_remote_replications(request):
         return_dict["select_mode"] = select_mode
         return_dict["is_zfs"] = is_zfs
         return_dict["is_rsync"] = is_rsync
-        return django.shortcuts.render_to_response('view_remote_replications.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_remote_replications.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "replication_base.html"
         return_dict["page_title"] = 'View Remote Replication'
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error retrieving replication informat'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_remote_replication(request):
@@ -98,7 +98,7 @@ def create_remote_replication(request):
                 modes=modes, select_mode=select_mode, datasets=datasets, switches=switches)
             return_dict['form'] = form
             return_dict['switches'] = switches
-            return django.shortcuts.render_to_response('create_remote_replication.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'create_remote_replication.html', return_dict)
 
         elif request.method == "POST":
             # check for parameters that are required initially for both
@@ -159,7 +159,7 @@ def create_remote_replication(request):
             return_dict['switches'] = switches
 
             if not form.is_valid():
-                return django.shortcuts.render_to_response('create_remote_replication.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'create_remote_replication.html', return_dict)
 
             if form.is_valid():
                 # well formed
@@ -184,7 +184,7 @@ def create_remote_replication(request):
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error configuring remote replication'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def _create_zfs_remote_replication(request, cleaned_data):
@@ -398,7 +398,7 @@ def update_remote_replication_user_comment(request):
                 if err:
                     raise Exception('Could not parse rsync switches description: %s' % err)
 
-            return django.shortcuts.render_to_response('update_remote_replication_user_comment.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_remote_replication_user_comment.html', return_dict)
         elif request.method == "POST":
             if ('user_comment') not in request.POST:
                 raise Exception("Incomplete request.")
@@ -423,7 +423,7 @@ def update_remote_replication_user_comment(request):
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error updating replication comment'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_remote_replication(request):
@@ -459,7 +459,7 @@ def update_remote_replication(request):
                 if err:
                     raise Exception('Could not parse rsync switches description: %s' % err)
 
-            return django.shortcuts.render_to_response('update_remote_replication.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_remote_replication.html', return_dict)
         elif request.method == "POST":
             if ('scheduler' and 'cron_task_id') not in request.POST:
                 raise Exception("Incomplete request.")
@@ -488,7 +488,7 @@ def update_remote_replication(request):
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error configuring replication'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_rsync_remote_replication_pause_schedule(request):
@@ -527,7 +527,7 @@ def update_rsync_remote_replication_pause_schedule(request):
                 if err:
                     raise Exception('Could not parse rsync switches description: %s' % err)
 
-            return django.shortcuts.render_to_response('update_remote_replication_pause_schedule.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_remote_replication_pause_schedule.html', return_dict)
         elif request.method == "POST":
             scheduler = None
             schedule = None
@@ -569,7 +569,7 @@ def update_rsync_remote_replication_pause_schedule(request):
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error updating rsync remote replication pause schedule'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_remote_replication(request):
@@ -594,7 +594,7 @@ def delete_remote_replication(request):
 
         if request.method == "GET":
             return_dict['replication'] = replications[0]
-            return django.shortcuts.render_to_response("delete_remote_replication_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_remote_replication_conf.html", return_dict)
         else:
             ret, err = remote_replication.delete_remote_replication(
                 remote_replication_id)
@@ -610,7 +610,7 @@ def delete_remote_replication(request):
         return_dict['tab'] = 'view_remote_replications_tab'
         return_dict["error"] = 'Error removing remote replication'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

@@ -45,16 +45,16 @@ def view_disks(request):
         # print si['disks']
         return_dict['node_name'] = si['fqdn']
         if type == 'os':
-            return django.shortcuts.render_to_response('view_os_disks.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'view_os_disks.html', return_dict)
         else:
-            return django.shortcuts.render_to_response('view_data_disks.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'view_data_disks.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Disks'
         return_dict['tab'] = 'view_%s_disks_tab' % type
         return_dict["error"] = 'Error loading disk information'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def identify_disk(request):
@@ -101,7 +101,7 @@ def identify_disk(request):
         return_dict['tab'] = 'view_data_disks_tab'
         return_dict["error"] = 'Error toggling disk identification'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def replace_disk(request):
@@ -294,7 +294,7 @@ def replace_disk(request):
                         return_dict["old_serial_number"] = serial_number
                         return_dict["new_serial_number"] = new_serial_number
                         template = "replace_disk_success.html"
-                    return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, template, return_dict)
 
             else:
                 if "serial_number" not in request.POST:
@@ -307,14 +307,14 @@ def replace_disk(request):
                         node = si['fqdn']
                     return_dict["serial_number"] = request.POST["serial_number"]
                     template = "replace_disk_conf.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Replace a disk in a ZFS pool'
         return_dict['tab'] = 'view_data_disks_tab'
         return_dict["error"] = 'Error replacing a disk in a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

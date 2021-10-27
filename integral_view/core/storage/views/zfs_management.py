@@ -21,14 +21,14 @@ def view_zfs_historical_usage(request):
             return_dict['no_usage_stats'] = True
 
         return_dict['pools'] = pools
-        return django.shortcuts.render_to_response('view_historical_zfs_space_util.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_historical_zfs_space_util.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["page_title"] = 'ZFS pools usage'
         return_dict['tab'] = 'zfs_space_util_tab'
         return_dict["error"] = 'Error loading ZFS hostical space usage'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def api_get_pool_usage_stats(request):
@@ -98,14 +98,14 @@ def view_zfs_pools(request):
             elif request.GET["ack"] == "replication_error":
                 return_dict['ack_message'] = "Replication Failed"
         return_dict["pool_list"] = pool_list
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'ZFS pools'
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error loading ZFS pools'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_pool(request):
@@ -218,14 +218,14 @@ def view_zfs_pool(request):
         elif view == 'quotas':
             template = "view_zfs_pool_quotas.html"
 
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'ZFS pool details'
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error loading ZFS pool details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_pool_history_events(request):
@@ -249,7 +249,7 @@ def view_zfs_pool_history_events(request):
         if err:
             raise Exception(err)
         return_dict['lines'] = lines[::-1]
-        return django.shortcuts.render_to_response('view_zfs_pool_events_history.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_zfs_pool_events_history.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         if action:
@@ -262,7 +262,7 @@ def view_zfs_pool_history_events(request):
         else:
             return_dict["error"] = 'Error loading ZFS pool history/events'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_zfs_quota(request):
@@ -300,12 +300,12 @@ def update_zfs_quota(request):
             form = zfs_forms.QuotaForm(user_group_list=ug_list, initial={
                                        'ug_type': ug_type, 'path': path})
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_zfs_quota.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_zfs_quota.html", return_dict)
         else:
             form = zfs_forms.QuotaForm(request.POST, user_group_list=ug_list)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_zfs_quota.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_zfs_quota.html", return_dict)
             cd = form.cleaned_data
             if cd['ug_type'] == 'user':
                 user = True
@@ -328,7 +328,7 @@ def update_zfs_quota(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error setting ZFS quota'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_quota(request):
@@ -353,7 +353,7 @@ def delete_zfs_quota(request):
         return_dict["ug_type"] = ug_type
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_quota_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_quota_conf.html", return_dict)
         else:
             if ug_type == 'user':
                 user = True
@@ -379,7 +379,7 @@ def delete_zfs_quota(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing ZFS quota'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def export_zfs_pool(request):
@@ -396,7 +396,7 @@ def export_zfs_pool(request):
         return_dict["pool_name"] = pool_name
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("export_zfs_pool_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "export_zfs_pool_conf.html", return_dict)
         else:
             result, err = zfs.export_pool(pool_name)
             if not result:
@@ -414,7 +414,7 @@ def export_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error exporting ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def import_all_zfs_pools(request):
@@ -429,14 +429,14 @@ def import_all_zfs_pools(request):
         return_dict['output'] = output
 
         template = "import_pool_from_disks_result.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Import all ZFS pools'
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error importing all ZFS pool(s) from disks'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def import_zfs_pool(request):
@@ -454,13 +454,13 @@ def import_zfs_pool(request):
             form = zfs_forms.ImportPoolForm(
                 exported_pools=exported_pools, destroyed_pools=destroyed_pools)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("import_zfs_pool.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "import_zfs_pool.html", return_dict)
         else:
             form = zfs_forms.ImportPoolForm(
                 request.POST, exported_pools=exported_pools, destroyed_pools=destroyed_pools)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("import_zfs_pool.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "import_zfs_pool.html", return_dict)
             cd = form.cleaned_data
             if cd and 'name' in cd:
                 ret, err = zfs.import_pool(cd['name'])
@@ -477,7 +477,7 @@ def import_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error importing a specific ZFS pool from disks'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_zfs_pool(request):
@@ -524,20 +524,20 @@ def create_zfs_pool(request):
                 if exported_pools or destroyed_pools:
                     avail_pools['exported_pools'] = exported_pools
                     avail_pools['destroyed_pools'] = destroyed_pools
-                    return django.shortcuts.render_to_response("create_zfs_pool_alert.html", avail_pools, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "create_zfs_pool_alert.html", avail_pools)
             # Return the configuration page
             form = zfs_forms.CreatePoolForm(pool_types=pool_types, num_free_disks=len(
                 free_disks), initial={'num_disks': len(free_disks)})
             return_dict['form'] = form
             return_dict['num_disks'] = len(free_disks)
-            return django.shortcuts.render_to_response("create_zfs_pool.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_zfs_pool.html", return_dict)
         else:
             form = zfs_forms.CreatePoolForm(
                 request.POST, pool_types=pool_types, num_free_disks=len(free_disks))
             return_dict['form'] = form
             return_dict['num_disks'] = len(free_disks)
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_zfs_pool.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_zfs_pool.html", return_dict)
             cd = form.cleaned_data
             # print cd
             vdev_list = None
@@ -574,7 +574,7 @@ def create_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error creating a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def expand_zfs_pool(request):
@@ -595,7 +595,7 @@ def expand_zfs_pool(request):
                 raise Exception('Cannot expand the specified pool.')
             return_dict['new_pool_type'] = new_pool_type
             return_dict['pool_name'] = pool_name
-            return django.shortcuts.render_to_response("expand_zfs_pool_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "expand_zfs_pool_conf.html", return_dict)
         else:
             ret, err = zfs.expand_pool(pool_name)
             if err:
@@ -610,7 +610,7 @@ def expand_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error expanding a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def scrub_zfs_pool(request):
@@ -627,7 +627,7 @@ def scrub_zfs_pool(request):
         return_dict["name"] = name
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("scrub_zfs_pool_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "scrub_zfs_pool_conf.html", return_dict)
         else:
             result, err = zfs.scrub_pool(name)
             if not result:
@@ -645,7 +645,7 @@ def scrub_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error scrubbing ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 def create_zfs_pool_scrub_schedule(request):
 
@@ -661,7 +661,7 @@ def create_zfs_pool_scrub_schedule(request):
         return_dict["pool_name"] = pool_name
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("schedule_scrub.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "schedule_scrub.html", return_dict)
         else:
             if 'scheduler' not in req_ret:
                 raise Exception("Invalid request, please use the menus.")
@@ -696,7 +696,7 @@ def create_zfs_pool_scrub_schedule(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error scheduling ZFS pool scrub'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 def delete_zfs_pool_scrub_schedule(request):
 
@@ -719,7 +719,7 @@ def delete_zfs_pool_scrub_schedule(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_scrub_schedule_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_scrub_schedule_conf.html", return_dict)
         else:
             cron_task_list, err = scheduler_utils.get_cron_tasks(cron_task_id, task_type_id=3)
             if err:
@@ -740,7 +740,7 @@ def delete_zfs_pool_scrub_schedule(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing scheduled ZFS pool scrub'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 def clear_zfs_pool(request):
 
@@ -773,7 +773,7 @@ def clear_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error clearing ZFS pool errors'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_pool(request):
@@ -822,7 +822,7 @@ def delete_zfs_pool(request):
         return_dict["name"] = name
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_pool_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_pool_conf.html", return_dict)
         else:
             result, err = zfs.delete_pool(name)
             if not result:
@@ -840,7 +840,7 @@ def delete_zfs_pool(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_zfs_slog(request):
@@ -900,12 +900,12 @@ def update_zfs_slog(request):
 
             form = zfs_forms.SlogForm(initial=initial, free_disks=free_disks)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_zfs_slog.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_zfs_slog.html", return_dict)
         else:
             form = zfs_forms.SlogForm(request.POST, free_disks=free_disks)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_zfs_slog.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_zfs_slog.html", return_dict)
             cd = form.cleaned_data
             # print cd
             if cd['slog'] == 'ramdisk':
@@ -952,7 +952,7 @@ def update_zfs_slog(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error setting ZFS pool write cache'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_slog(request):
@@ -973,7 +973,7 @@ def delete_zfs_slog(request):
         return_dict["type"] = type
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_slog_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_slog_conf.html", return_dict)
         else:
             result, err = zfs.delete_pool_vdev(pool, device)
             if not result:
@@ -996,7 +996,7 @@ def delete_zfs_slog(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing ZFS pool write cache'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_zfs_l2arc(request):
@@ -1035,12 +1035,12 @@ def update_zfs_l2arc(request):
 
             form = zfs_forms.L2arcForm(initial=initial, free_disks=free_disks)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_zfs_l2arc.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_zfs_l2arc.html", return_dict)
         else:
             form = zfs_forms.L2arcForm(request.POST, free_disks=free_disks)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_zfs_l2arc.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_zfs_l2arc.html", return_dict)
             cd = form.cleaned_data
             # print cd
             result, err = zfs.update_pool_cache_vdev(cd['pool'], cd['disk'])
@@ -1055,7 +1055,7 @@ def update_zfs_l2arc(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error setting ZFS pool read cache'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_l2arc(request):
@@ -1077,7 +1077,7 @@ def delete_zfs_l2arc(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_l2arc_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_l2arc_conf.html", return_dict)
         else:
             result, err = zfs.delete_pool_vdev(pool, device)
             if not result:
@@ -1095,7 +1095,7 @@ def delete_zfs_l2arc(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing ZFS pool read cache'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_dataset(request):
@@ -1167,14 +1167,14 @@ def view_zfs_dataset(request):
             return_dict['result'] = request.GET['result']
 
         template = "view_zfs_dataset.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'ZFS dataset details'
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error loading ZFS dataset details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_zfs_dataset(request):
@@ -1219,7 +1219,7 @@ def update_zfs_dataset(request):
             else:
                 form = zfs_forms.BaseDatasetForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_zfs_dataset.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_zfs_dataset.html", return_dict)
         else:
             if is_zvol is True:
                 form = zfs_forms.BaseZvolForm(request.POST)
@@ -1227,7 +1227,7 @@ def update_zfs_dataset(request):
                 form = zfs_forms.BaseDatasetForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_zfs_dataset.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_zfs_dataset.html", return_dict)
             cd = form.cleaned_data
             result_str = ""
             audit_str = "Changed the following dataset properties for dataset %s : " % name
@@ -1285,7 +1285,7 @@ def update_zfs_dataset(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error modifying ZFS dataset properties'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_zfs_dataset_advanced_properties(request):
@@ -1319,13 +1319,13 @@ def update_zfs_dataset_advanced_properties(request):
             form = zfs_forms.AdvancedDatasetZvolPropertiesForm(
                 modifiable_properties=prop_dict['modifiable_properties'], initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_zfs_dataset_zvol_advanced_properties.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_zfs_dataset_zvol_advanced_properties.html", return_dict)
         else:
             form = zfs_forms.AdvancedDatasetZvolPropertiesForm(
                 request.POST, modifiable_properties=prop_dict['modifiable_properties'])
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_zfs_dataset_zvol_advanced_properties.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_zfs_dataset_zvol_advanced_properties.html", return_dict)
             cd = form.cleaned_data
             result_str = ""
             result, err = zfs.update_dataset_zvol_property(
@@ -1343,7 +1343,7 @@ def update_zfs_dataset_advanced_properties(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error modifying ZFS advanced dataset/volume properties'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_dataset(request):
@@ -1396,7 +1396,7 @@ def delete_zfs_dataset(request):
         return_dict["type"] = type
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_dataset_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_dataset_conf.html", return_dict)
         else:
             result, err = zfs.delete_dataset(name)
             if not result:
@@ -1419,7 +1419,7 @@ def delete_zfs_dataset(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing a dataset/volume '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_zfs_dataset(request):
@@ -1446,12 +1446,12 @@ def create_zfs_dataset(request):
             initial['pool'] = pool
             form = zfs_forms.CreateDatasetForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_zfs_dataset.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_zfs_dataset.html", return_dict)
         else:
             form = zfs_forms.CreateDatasetForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_zfs_dataset.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_zfs_dataset.html", return_dict)
             cd = form.cleaned_data
             properties = {}
             if 'compression' in cd and cd['compression']:
@@ -1479,7 +1479,7 @@ def create_zfs_dataset(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error creating a ZFS dataset'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_zfs_zvol(request):
@@ -1504,12 +1504,12 @@ def create_zfs_zvol(request):
             initial['block_size'] = '64K'
             form = zfs_forms.CreateZvolForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_zfs_zvol.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_zfs_zvol.html", return_dict)
         else:
             form = zfs_forms.CreateZvolForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_zfs_zvol.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_zfs_zvol.html", return_dict)
             cd = form.cleaned_data
             properties = {}
             if 'compression' in cd and cd['compression']:
@@ -1542,7 +1542,7 @@ def create_zfs_zvol(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error creating a ZFS block device volume '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_zvol(request):
@@ -1585,7 +1585,7 @@ def view_zfs_zvol(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error loading ZFS block device volume details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_snapshots(request):
@@ -1642,14 +1642,14 @@ def view_zfs_snapshots(request):
         return_dict['form'] = form
         return_dict["snap_list"] = snap_list
         template = "view_zfs_snapshots.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'ZFS snapshots'
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error loading ZFS snapshots'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_zfs_snapshot(request):
@@ -1670,13 +1670,13 @@ def create_zfs_snapshot(request):
             form = zfs_forms.CreateSnapshotForm(
                 initial=initial, datasets=datasets)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_zfs_snapshot.html", return_dict)
         else:
             form = zfs_forms.CreateSnapshotForm(
                 request.POST, datasets=datasets)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_zfs_snapshot.html", return_dict)
             cd = form.cleaned_data
             result, err = zfs.create_snapshot(cd['target'], cd['name'])
             if not result:
@@ -1695,7 +1695,7 @@ def create_zfs_snapshot(request):
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error creating a ZFS snapshot'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_snapshot(request):
@@ -1715,7 +1715,7 @@ def delete_zfs_snapshot(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_zfs_snapshot_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_snapshot_conf.html", return_dict)
         else:
             result, err = zfs.delete_snapshot(name)
             if not result:
@@ -1733,7 +1733,7 @@ def delete_zfs_snapshot(request):
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error deleting a ZFS snapshot'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_all_zfs_snapshots(request):
@@ -1762,14 +1762,14 @@ def delete_all_zfs_snapshots(request):
             form = zfs_forms.DeleteSnapshotsForm(
                 child_fs=child_fs)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("delete_all_zfs_snapshots.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_all_zfs_snapshots.html", return_dict)
 
         else:
             form = zfs_forms.DeleteSnapshotsForm(
                 request.POST, child_fs=child_fs)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("delete_all_zfs_snapshots.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "delete_all_zfs_snapshots.html", return_dict)
 
             cd = form.cleaned_data
 
@@ -1803,7 +1803,7 @@ def delete_all_zfs_snapshots(request):
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error deleting ZFS snapshots'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def rollback_zfs_snapshot(request):
@@ -1823,7 +1823,7 @@ def rollback_zfs_snapshot(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("rollback_zfs_snapshot_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "rollback_zfs_snapshot_conf.html", return_dict)
         else:
             result, err = zfs.rollback_snapshot(name)
             if not result:
@@ -1841,7 +1841,7 @@ def rollback_zfs_snapshot(request):
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error rolling back a  ZFS snapshot'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def rename_zfs_snapshot(request):
@@ -1860,12 +1860,12 @@ def rename_zfs_snapshot(request):
             initial['ds_name'] = ds_name
             form = zfs_forms.RenameSnapshotForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("rename_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "rename_zfs_snapshot.html", return_dict)
         else:
             form = zfs_forms.RenameSnapshotForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("rename_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "rename_zfs_snapshot.html", return_dict)
             cd = form.cleaned_data
             result, err = zfs.rename_snapshot(
                 cd['ds_name'], cd['snapshot_name'], cd['new_snapshot_name'])
@@ -1885,7 +1885,7 @@ def rename_zfs_snapshot(request):
         return_dict['tab'] = 'view_zfs_snapshots_tab'
         return_dict["error"] = 'Error renaming a loading ZFS snapshot'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_zfs_snapshot_schedules(request):
@@ -1898,14 +1898,14 @@ def view_zfs_snapshot_schedules(request):
         if err:
             raise Exception(err)
         return_dict["snapshot_schedules"] = snapshot_schedules
-        return django.shortcuts.render_to_response("view_zfs_snapshot_schedules.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_zfs_snapshot_schedules.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'ZFS snapshot schedules'
         return_dict['tab'] = 'zfs_snapshots_schedule_tab'
         return_dict["error"] = 'Error retrieving ZFS snapshot schedules'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def schedule_zfs_snapshot(request):
@@ -1940,13 +1940,13 @@ def schedule_zfs_snapshot(request):
             form = zfs_forms.ScheduleSnapshotForm(
                 initial=initial, datasets=datasets)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("schedule_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "schedule_zfs_snapshot.html", return_dict)
         else:
             form = zfs_forms.ScheduleSnapshotForm(
                 request.POST, datasets=datasets)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("schedule_zfs_snapshot.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "schedule_zfs_snapshot.html", return_dict)
             cd = form.cleaned_data
             target = cd['target']
             frequent = cd['frequent']
@@ -1968,7 +1968,7 @@ def schedule_zfs_snapshot(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error scheduling ZFS snapshot'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_zfs_spares(request):
@@ -1992,13 +1992,13 @@ def create_zfs_spares(request):
             form = zfs_forms.AddSparesForm(num_free_drives=num_free_drives)
             return_dict['form'] = form
             return_dict['pool_name'] = pool_name
-            return django.shortcuts.render_to_response("create_zfs_spares.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_zfs_spares.html", return_dict)
         else:
             form = zfs_forms.AddSparesForm(
                 request.POST, num_free_drives=num_free_drives)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_zfs_spares.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_zfs_spares.html", return_dict)
             cd = form.cleaned_data
             num_spares = cd['num_spares']
             # print num_spares
@@ -2016,7 +2016,7 @@ def create_zfs_spares(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error adding spares drives to a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_zfs_spare(request):
@@ -2037,7 +2037,7 @@ def delete_zfs_spare(request):
                 'The pool does not have any spare drives assigned to it')
         if request.method == 'GET':
             return_dict['pool_name'] = pool_name
-            return django.shortcuts.render_to_response("delete_zfs_spare_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_zfs_spare_conf.html", return_dict)
         else:
             ret, err = zfs.delete_spare_from_pool(pool_name)
             if err:
@@ -2052,7 +2052,7 @@ def delete_zfs_spare(request):
         return_dict['tab'] = 'view_zfs_pools_tab'
         return_dict["error"] = 'Error removing a  spares disk from a ZFS pool'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

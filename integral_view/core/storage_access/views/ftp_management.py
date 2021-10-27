@@ -20,7 +20,7 @@ def view_ftp_configuration(request):
             raise Exception(err)
 
         return_dict['config'] = config
-        return django.shortcuts.render_to_response('view_ftp_configuration.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_ftp_configuration.html', return_dict)
 
     except Exception as e:
         return_dict['base_template'] = "storage_access_base.html"
@@ -28,7 +28,7 @@ def view_ftp_configuration(request):
         return_dict['tab'] = 'ftp_service_settings'
         return_dict["error"] = 'Error retrieving the FTP service configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_ftp_configuration(request):
@@ -62,13 +62,13 @@ def update_ftp_configuration(request):
             form = ftp_management_forms.ConfigureFTPForm(
                 datasets=ds_list, cert_names=cert_name_list, initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response('update_ftp_configuration.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_ftp_configuration.html', return_dict)
         else:
             form = ftp_management_forms.ConfigureFTPForm(
                 request.POST, cert_names=cert_name_list, datasets=ds_list)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_ftp_configuration.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_ftp_configuration.html", return_dict)
             cd = form.cleaned_data
             ret, err = vsftp.update_ftp_config(cd)
             if err:
@@ -94,7 +94,7 @@ def update_ftp_configuration(request):
         return_dict['tab'] = 'ftp_service_settings'
         return_dict["error"] = 'Error configuring the FTP service '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_ftp_user_dirs(request):
@@ -123,7 +123,7 @@ def create_ftp_user_dirs(request):
         return_dict['tab'] = 'ftp_service_settings'
         return_dict["error"] = 'Error creating FTP user directories '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

@@ -29,16 +29,17 @@ def view_services(request):
                 return_dict['ack_message'] = 'Service status change initiated'
 
         return_dict["services"], err = services_management.get_sysd_services_status()
+        print('return_dict:', return_dict["services"])
         if err:
             raise Exception(err)
-        return django.shortcuts.render_to_response('view_services.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_services.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'System services'
         return_dict['tab'] = 'view_services_tab'
         return_dict["error"] = 'Error loading system services status'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_service_status(request):
@@ -86,7 +87,7 @@ def update_service_status(request):
         return_dict['tab'] = 'view_services_tab'
         return_dict["error"] = 'Error modifying system services state'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 if __name__ == '__main__':

@@ -41,14 +41,14 @@ def view_interfaces(request):
         return_dict["nics"] = nics
         return_dict["bonds"] = bonds
         template = "view_interfaces.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network interfaces'
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error loading interfaces'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_interface(request):
@@ -88,14 +88,14 @@ def view_interface(request):
         return_dict['name'] = name
 
         template = "view_interface.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network interface details'
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error loading interface details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_interface_connection(request):
@@ -113,7 +113,7 @@ def delete_interface_connection(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_interface_connection_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_interface_connection_conf.html", return_dict)
         else:
             result, err = networking.delete_interfaces_connection(name)
             if not result:
@@ -132,7 +132,7 @@ def delete_interface_connection(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error resetting interface address configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_interface_state(request):
@@ -153,7 +153,7 @@ def update_interface_state(request):
 
         if request.method == "GET" and state == 'down':
             # Return the conf page
-            return django.shortcuts.render_to_response("update_interface_state_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_interface_state_conf.html", return_dict)
         else:
             result, err = networking.update_interface_state(name, state)
             if not result:
@@ -172,7 +172,7 @@ def update_interface_state(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error setting interface state'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_bond(request):
@@ -205,14 +205,14 @@ def view_bond(request):
         return_dict['name'] = name
 
         template = "view_bond.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View network bond details'
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error loading network bond details'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_interface_address(request):
@@ -255,12 +255,12 @@ def update_interface_address(request):
 
             form = networking_forms.NICForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_interface_address.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_interface_address.html", return_dict)
         else:
             form = networking_forms.NICForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_interface_address.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_interface_address.html", return_dict)
             cd = form.cleaned_data
             result_str = ""
             success = False
@@ -286,7 +286,7 @@ def update_interface_address(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error modifying network interface addressing'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_vlan(request):
@@ -322,13 +322,13 @@ def create_vlan(request):
             form = networking_forms.CreateVLANForm(existing_vlans=existing_vlans, initial={
                                                    'base_interface': req_ret['nic']})
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_vlan.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_vlan.html", return_dict)
         else:
             form = networking_forms.CreateVLANForm(
                 request.POST, existing_vlans=existing_vlans)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_vlan.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_vlan.html", return_dict)
             cd = form.cleaned_data
             # print cd
             result, err = networking.create_vlan(
@@ -353,7 +353,7 @@ def create_vlan(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error creating a network VLAN'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_vlan(request):
@@ -370,7 +370,7 @@ def delete_vlan(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_vlan_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_vlan_conf.html", return_dict)
         else:
             result, err = networking.delete_vlan(name)
             if not result:
@@ -392,7 +392,7 @@ def delete_vlan(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error removing a VLAN'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_bond(request):
@@ -432,13 +432,13 @@ def create_bond(request):
             form = networking_forms.CreateBondForm(
                 interfaces=iface_list, existing_bonds=existing_bonds)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_bond.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_bond.html", return_dict)
         else:
             form = networking_forms.CreateBondForm(
                 request.POST, interfaces=iface_list, existing_bonds=existing_bonds)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_bond.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_bond.html", return_dict)
             cd = form.cleaned_data
             print(cd)
             result, err = networking.create_bond(
@@ -478,7 +478,7 @@ def create_bond(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error creating a network interface bond'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_bond(request):
@@ -496,7 +496,7 @@ def delete_bond(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_bond_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_bond_conf.html", return_dict)
         else:
             result, err = networking.delete_bond(name)
             if not result:
@@ -534,7 +534,7 @@ def delete_bond(request):
         return_dict['tab'] = 'view_interfaces_tab'
         return_dict["error"] = 'Error removing a network interface bond'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_hostname(request):
@@ -555,14 +555,14 @@ def view_hostname(request):
             return_dict['domain_name'] = domain_name
             return_dict['hostname'] = hostname
             template = "view_hostname.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View system hostname'
         return_dict['tab'] = 'view_hostname_tab'
         return_dict["error"] = 'Error loading system hostname'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_hostname(request):
@@ -584,12 +584,12 @@ def update_hostname(request):
 
             form = networking_forms.EditHostnameForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_hostname.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_hostname.html", return_dict)
         else:
             form = networking_forms.EditHostnameForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_hostname.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_hostname.html", return_dict)
             cd = form.cleaned_data
             result_str = ""
             domain_name = None
@@ -640,7 +640,7 @@ def update_hostname(request):
         return_dict['tab'] = 'view_hostname_tab'
         return_dict["error"] = 'Error modifying system hostname'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_dns_nameservers(request):
@@ -655,14 +655,14 @@ def view_dns_nameservers(request):
                 return_dict['ack_message'] = "Name servers successfully updated"
         return_dict['name_servers'] = ns_list
         template = "view_dns_nameservers.html"
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'View DNS servers'
         return_dict['tab'] = 'view_dns_nameservers_tab'
         return_dict["error"] = 'Error loading DNS servers'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 @login_required
@@ -702,14 +702,14 @@ def update_dns_nameservers(request):
                 # invalid form
                 url = "update_dns_nameservers.html"
         return_dict["form"] = form
-        return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, url, return_dict)
     except Exception as e:
         return_dict['base_template'] = "networking_base.html"
         return_dict["page_title"] = 'Modify DNS servers'
         return_dict['tab'] = 'view_dns_nameservers_tab'
         return_dict["error"] = 'Error modifying DNS servers'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 '''

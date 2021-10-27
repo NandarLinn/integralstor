@@ -19,14 +19,14 @@ def view_applications(request):
             raise Exception(err)
 
         return_dict["applications"] = applications
-        return django.shortcuts.render_to_response("view_applications.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_applications.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "application_management_base.html"
         return_dict["page_title"] = 'Installed applications'
         return_dict['tab'] = 'view_applications_tab'
         return_dict["error"] = 'Error retriving installed applications'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 def launch_application(request):
     return_dict = {}
@@ -71,7 +71,7 @@ def launch_application(request):
         
         return_dict["application"] = application
         return_dict["url"] = url
-        return django.shortcuts.render_to_response("application_launcher.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "application_launcher.html", return_dict)
     except Exception as e:
         print(('exception', e))
         return_dict['base_template'] = "application_management_base.html"
@@ -79,4 +79,4 @@ def launch_application(request):
         return_dict['tab'] = 'applications_tab'
         return_dict["error"] = 'Error launching application'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)

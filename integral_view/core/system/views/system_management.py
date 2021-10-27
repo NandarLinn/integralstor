@@ -38,14 +38,14 @@ def view_email_settings(request):
             return_dict["err"] = ret['err']
         if 'sent_mail' in ret:
             return_dict["sent_mail"] = ret['sent_mail']
-        return django.shortcuts.render_to_response('view_email_settings.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_email_settings.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View email notification settings'
         return_dict['tab'] = 'email_tab'
         return_dict["error"] = 'Error viewing email notification settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 def update_email_settings(request):
@@ -85,14 +85,14 @@ def update_email_settings(request):
                 else:
                     return django.http.HttpResponseRedirect("/system/view_email_settings?ack=saved&err=%s" % err)
         return_dict["form"] = form
-        return django.shortcuts.render_to_response(url, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, url, return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Change email notification settings'
         return_dict['tab'] = 'email_tab'
         return_dict["error"] = 'Error changing email notification settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 def view_https_mode(request):
@@ -109,14 +109,14 @@ def view_https_mode(request):
                 return_dict['ack_message'] = "The IntegralView access mode has been successfully set to non-secure(HTTP). The server has been scheduled to restart. Please change your browser to access IntegralView using http://<integralview_ip_address>"
 
         return_dict['port'] = mode['port']
-        return django.shortcuts.render_to_response('view_https_mode.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_https_mode.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Integralview access mode'
         return_dict['tab'] = 'system_info_tab'
         return_dict["error"] = 'Error loading IntegralView access mode'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_https_mode(request):
@@ -142,17 +142,17 @@ def update_https_mode(request):
             if change_to == 'secure':
                 form = keys_certs_forms.SetHttpsModeForm(cert_list=cert_list)
                 return_dict['form'] = form
-                return django.shortcuts.render_to_response("update_https_mode.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_https_mode.html", return_dict)
             else:
                 return_dict['conf_message'] = 'Are you sure you want to disable the secure access mode for IntegralView?'
-                return django.shortcuts.render_to_response("update_http_mode_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_http_mode_conf.html", return_dict)
         else:
             if change_to == 'secure':
                 form = keys_certs_forms.SetHttpsModeForm(
                     request.POST, cert_list=cert_list)
                 return_dict['form'] = form
                 if not form.is_valid():
-                    return django.shortcuts.render_to_response("update_https_mode.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "update_https_mode.html", return_dict)
                 cd = form.cleaned_data
             if change_to == 'secure':
                 pki_dir, err = config.get_pki_dir()
@@ -188,7 +188,7 @@ def update_https_mode(request):
         return_dict['tab'] = 'system_info_tab'
         return_dict["error"] = 'Error modifying IntegralView access mode'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def reboot_or_shutdown(request):
@@ -205,7 +205,7 @@ def reboot_or_shutdown(request):
         do = ret['do']
         return_dict['do'] = do
         if request.method == "GET":
-            return django.shortcuts.render_to_response("reboot_or_shutdown.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "reboot_or_shutdown.html", return_dict)
         else:
             if 'conf' not in request.POST:
                 raise Exception('Unknown action. Please use the menus')
@@ -215,14 +215,14 @@ def reboot_or_shutdown(request):
                 command.execute_with_rc('shutdown -r +%d' % minutes_to_wait)
             elif do == 'shutdown':
                 command.execute_with_rc('shutdown -h +%d' % minutes_to_wait)
-            return django.shortcuts.render_to_response("reboot_or_shutdown_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "reboot_or_shutdown_conf.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Reboot or Shutdown Failure'
         return_dict['tab'] = 'reboot_tab'
         return_dict["error"] = 'Error Rebooting'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 @login_required
 #@django.views.decorators.csrf.csrf_exempt
 def flag_node(request):
@@ -264,7 +264,7 @@ def access_shell(request):
         if err:
             raise Exception(err)
         if status['status_str'] == "Running":
-            return django.shortcuts.render_to_response("shell_access.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "shell_access.html", return_dict)
         else:
             raise Exception(
                 "Shell Service is not running. Start the service and visit the page again")
@@ -275,7 +275,7 @@ def access_shell(request):
         return_dict['tab'] = 'shell_tab'
         return_dict["error"] = 'Error loading Shell, Check the service'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 @login_required
 def update_manifest(request):
@@ -290,7 +290,7 @@ def update_manifest(request):
             if not mi:
                 raise Exception('Could not load new configuration')
             return_dict["mi"] = mi  # Need the hostname here.
-            return django.shortcuts.render_to_response("update_manifest.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_manifest.html", return_dict)
         elif request.method == "POST":
             python_scripts_path, err = config.get_python_scripts_path()
             if err:
@@ -300,13 +300,13 @@ def update_manifest(request):
                 raise Exception(err)
             #(ret,rc), err = command.execute_with_rc("python %s/generate_manifest.py %s"%(python_scripts_path, ss_path))
             ret, err = command.get_command_output(
-                "python %s/generate_manifest.py %s" % (python_scripts_path, ss_path))
+                "python3 %s/generate_manifest.py %s" % (python_scripts_path, ss_path))
             # print 'mani', ret, err
             if err:
                 raise Exception(err)
             #(ret,rc), err = command.execute_with_rc("python %s/generate_status.py %s"%(config.get_python_scripts_path(),config.get_system_status_path()))
             ret, err = command.get_command_output(
-                "python %s/generate_status.py %s" % (python_scripts_path, ss_path))
+                "python3 %s/generate_status.py %s" % (python_scripts_path, ss_path))
             # print 'stat', ret, err
             if err:
                 raise Exception(err)
@@ -320,7 +320,7 @@ def update_manifest(request):
         return_dict['tab'] = 'system_info_tab'
         return_dict["error"] = 'Error reloading system configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 @login_required
@@ -333,12 +333,12 @@ def update_org_info(request):
                 raise Exception(err)
             form = system_forms.OrgInfoForm(initial=org_info)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response("update_org_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_org_info.html", return_dict)
         elif request.method == "POST":
             form = system_forms.OrgInfoForm(request.POST)
             return_dict["form"] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("update_org_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_org_info.html", return_dict)
 
             cd = form.cleaned_data
             ret, err = system_info.update_org_info(cd)
@@ -355,7 +355,7 @@ def update_org_info(request):
         return_dict['tab'] = 'system_info_tab'
         return_dict["error"] = 'Error updating organization information'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 @login_required
@@ -414,14 +414,14 @@ def view_system_info(request):
             frm = request.GET["from"]
             return_dict['frm'] = frm
         return_dict['node'] = si
-        return django.shortcuts.render_to_response("view_system_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_system_info.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'System configuration'
         return_dict['tab'] = 'node_info_tab'
         return_dict["error"] = 'Error loading system configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 @login_required
@@ -459,7 +459,7 @@ def reset_to_factory_defaults(request):
         if request.method == 'GET':
             form = system_forms.FactoryDefaultsForm()
             return_dict['form'] = form
-            return django.shortcuts.render_to_response('reset_to_factory_defaults.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'reset_to_factory_defaults.html', return_dict)
         else:
             req_ret, err = django_utils.get_request_parameter_values(request, [
                 'conf'])
@@ -480,7 +480,7 @@ def reset_to_factory_defaults(request):
                     return_dict['selected_components_str'] = ','.join(
                         selected_components)
                     return_dict['form'] = form
-                    return django.shortcuts.render_to_response('reset_to_factory_defaults_conf.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, 'reset_to_factory_defaults_conf.html', return_dict)
                 else:
                     # Got the confirmation so now do the work.
                     success_list = []
@@ -585,11 +585,11 @@ def reset_to_factory_defaults(request):
                     audit.audit('factory_defaults_reset', audit_str, request)
                     return_dict['success_list'] = success_list
                     return_dict['error_dict'] = error_dict
-                    return django.shortcuts.render_to_response('reset_to_factory_defaults_result.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request,'reset_to_factory_defaults_result.html')
             else:
                 # Bad form
                 return_dict['form'] = form
-                return django.shortcuts.render_to_response('reset_to_factory_defaults.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'reset_to_factory_defaults.html', return_dict)
 
     except Exception as e:
         return_dict["base_template"] = 'system_base.html'
@@ -597,7 +597,7 @@ def reset_to_factory_defaults(request):
         return_dict['page_title'] = 'Reset to factory defaults'
         return_dict["error"] = 'Error resetting to factory defaults'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_system_date_time(request):
@@ -606,7 +606,7 @@ def update_system_date_time(request):
         if request.method == 'GET':
             form = system_forms.DateTimeForm()
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_system_date_time.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_system_date_time.html", return_dict)
 
         if request.method == 'POST':
             form = system_forms.DateTimeForm(request.POST)
@@ -657,14 +657,14 @@ def update_system_date_time(request):
                     return django.http.HttpResponseRedirect(url)
             else:
                 return_dict["form"] = form
-                return django.shortcuts.render_to_response("update_system_date_time.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_system_date_time.html", return_dict)
     except Exception as e:
         return_dict["base_template"] = 'system_base.html'
         return_dict['tab'] = 'system_info_tab'
         return_dict['page_title'] = 'Update system and hardware date and time'
         return_dict["error"] = 'Error Performing Date Time Update'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
     else:
         return django.http.HttpResponseRedirect("/system/view_system_info")
 
@@ -724,7 +724,7 @@ def download_sys_info(request):
         return_dict["page_title"] = 'Download system configuration'
         return_dict["error"] = 'Error downloading system configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def _handle_uploaded_file(f):
@@ -845,7 +845,7 @@ def upload_sys_info(request):
         else:
             form = common_forms.FileUploadForm()
             return_dict["form"] = form
-            return django.shortcuts.render_to_response("upload_sys_info.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "upload_sys_info.html", return_dict)
     except Exception as e:
         audit_str = 'Upload of an external system configuration failed : %s.' % str(
             e)
@@ -856,7 +856,7 @@ def upload_sys_info(request):
         return_dict["page_title"] = 'Upload system configuration'
         return_dict["error"] = 'Error uploading system configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

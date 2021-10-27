@@ -244,9 +244,9 @@ def create_aces(request):
                     initial=initial, user_list=new_users, group_list=new_groups)
             return_dict["form"] = form
             if for_share:
-                return django.shortcuts.render_to_response("create_cifs_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_cifs_aces.html", return_dict)
             else:
-                return django.shortcuts.render_to_response("create_dir_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_dir_aces.html", return_dict)
         else:
             if for_share:
                 form = samba_shares_forms.AddShareAcesForm(
@@ -269,9 +269,9 @@ def create_aces(request):
                     raise Exception(err)
             else:
                 if for_share:
-                    return django.shortcuts.render_to_response("create_cifs_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "create_cifs_aces.html", return_dict)
                 else:
-                    return django.shortcuts.render_to_response("create_dir_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "create_dir_aces.html", return_dict)
 
             audit_str = 'Added ACL entries : '
             for user in users:
@@ -291,7 +291,7 @@ def create_aces(request):
         return_dict["page_title"] = 'Add new  ACL entries'
         return_dict["error"] = 'Error adding new ACL entries'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_aces(request):
@@ -406,9 +406,9 @@ def update_aces(request):
             return_dict['group_form_fields'] = group_form_fields
 
             if for_share:
-                return django.shortcuts.render_to_response("update_cifs_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_cifs_aces.html", return_dict)
             else:
-                return django.shortcuts.render_to_response("update_dir_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_dir_aces.html", return_dict)
 
         else:
             if for_share:
@@ -443,9 +443,9 @@ def update_aces(request):
                     raise Exception(err)
             else:
                 if for_share:
-                    return django.shortcuts.render_to_response("update_cifs_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "update_cifs_aces.html", return_dict)
                 else:
-                    return django.shortcuts.render_to_response("update_dir_aces.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                    return django.shortcuts.render(request, "update_dir_aces.html", return_dict)
 
             if for_share:
                 audit_str = 'Modified ACL entries for CIFS share %s: ' % share_name
@@ -460,7 +460,7 @@ def update_aces(request):
         return_dict["page_title"] = 'Modify ACL entries'
         return_dict["error"] = 'Error modifying ACL entries'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_ace(request):
@@ -507,9 +507,9 @@ def delete_ace(request):
         if request.method == "GET":
             # Return the conf page
             if for_share:
-                return django.shortcuts.render_to_response("delete_cifs_ace_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "delete_cifs_ace_conf.html", return_dict)
             else:
-                return django.shortcuts.render_to_response("delete_dir_ace_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "delete_dir_ace_conf.html", return_dict)
         else:
             if 'recursive' in req_ret and req_ret['recursive']:
                 recursive = True
@@ -534,7 +534,7 @@ def delete_ace(request):
         return_dict["page_title"] = 'Delete an ACL entry'
         return_dict["error"] = 'Error deleting an ACL entry'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_dir(request):
@@ -570,7 +570,7 @@ def create_dir(request):
             initial['path'] = path
             form = folder_management_forms.CreateDirForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response('create_dir.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'create_dir.html', return_dict)
         else:
             form = folder_management_forms.CreateDirForm(request.POST)
             if form.is_valid():
@@ -601,14 +601,14 @@ def create_dir(request):
                 return django.http.HttpResponseRedirect('/storage/view_dir_manager/?ack=created_dir')
             else:
                 return_dict['form'] = form
-                return django.shortcuts.render_to_response('create_dir.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'create_dir.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Create a directory'
         return_dict['tab'] = 'dir_permissions_tab'
         return_dict["error"] = 'Error creating directory'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_dir(request):
@@ -639,7 +639,7 @@ def delete_dir(request):
             initial['path'] = request.GET['path']
             form = folder_management_forms.DirForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response('delete_dir_conf.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'delete_dir_conf.html', return_dict)
         else:
             form = folder_management_forms.DirForm(request.POST)
             if form.is_valid():
@@ -676,7 +676,7 @@ def delete_dir(request):
         return_dict['tab'] = 'dir_permissions_tab'
         return_dict["error"] = 'Error deleting directory'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_dir_listing(request):
@@ -756,14 +756,14 @@ def view_dir_manager(request):
         form = folder_management_forms.DirManagerForm1(
             initial=initial, pool_list=pool_list)
         return_dict["form"] = form
-        return django.shortcuts.render_to_response('view_dir_manager.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_dir_manager.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Directory manager'
         return_dict['tab'] = 'dir_manager_tab'
         return_dict["error"] = 'Error loading directory manager'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_dir_ownership_permissions(request):
@@ -834,14 +834,14 @@ def view_dir_ownership_permissions(request):
         if group_aces:
             return_dict['group_aces'] = group_aces
 
-        return django.shortcuts.render_to_response('view_dir_ownership_permissions.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_dir_ownership_permissions.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Directory manager'
         return_dict['tab'] = 'dir_manager_tab'
         return_dict["error"] = 'Error loading directory ownership and permissions'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_dir_owner(request):
@@ -883,7 +883,7 @@ def update_dir_owner(request):
             form = folder_management_forms.ModifyOwnershipForm(
                 initial=initial, user_list=users, group_list=groups)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response('update_dir_ownership.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_dir_ownership.html', return_dict)
         else:
             form = folder_management_forms.ModifyOwnershipForm(
                 request.POST, user_list=users, group_list=groups)
@@ -898,7 +898,7 @@ def update_dir_owner(request):
                 audit.audit("modify_dir_owner_permissions", audit_str, request)
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=modified_ownership' % cd['path'])
             else:
-                return django.shortcuts.render_to_response('update_dir_ownership.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_dir_ownership.html', return_dict)
 
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
@@ -906,7 +906,7 @@ def update_dir_owner(request):
         return_dict['tab'] = 'dir_permissions_tab'
         return_dict["error"] = 'Error modifying directory ownership'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_dir_permissions(request):
@@ -1011,7 +1011,7 @@ def update_dir_permissions(request):
                 initial=initial, user_list=users, group_list=groups)
 
             return_dict["form"] = form
-            return django.shortcuts.render_to_response('update_dir_permissions.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_dir_permissions.html', return_dict)
 
         elif request.method == "POST":
             path = request.POST.get("path")
@@ -1071,14 +1071,14 @@ def update_dir_permissions(request):
             return django.http.HttpResponseRedirect('/storage/update_dir_permissions/?ack=set_permissions')
 
         else:
-            return django.shortcuts.render_to_response('update_dir_permissions.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_dir_permissions.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Modify ownership/permissions on a directory'
         return_dict['tab'] = 'dir_permissions_tab'
         return_dict["error"] = 'Error modifying directory ownership/permissions'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_sticky_bit(request):
@@ -1103,7 +1103,7 @@ def update_sticky_bit(request):
             initial['sticky_bit_enabled'] = sticky_bit_enabled
             form = folder_management_forms.ModifyStickyBitForm(initial=initial)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response('update_sticky_bit.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, 'update_sticky_bit.html', return_dict)
         else:
             form = folder_management_forms.ModifyStickyBitForm(request.POST)
             return_dict["form"] = form
@@ -1135,14 +1135,14 @@ def update_sticky_bit(request):
                 audit.audit("modify_dir_sticky_bit", audit_str, request)
                 return django.http.HttpResponseRedirect('/storage/view_dir_ownership_permissions?path=%s&ack=modified_sticky_bit' % cd['path'])
             else:
-                return django.shortcuts.render_to_response('update_dir_ownership.html', return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, 'update_dir_ownership.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "storage_base.html"
         return_dict["page_title"] = 'Modify directory sticky bit settings'
         return_dict['tab'] = 'dir_permissions_tab'
         return_dict["error"] = 'Error modifying directory sticky bit settings'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

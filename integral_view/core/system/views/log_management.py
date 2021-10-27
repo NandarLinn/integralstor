@@ -27,14 +27,14 @@ def view_audits(request):
         if err:
             raise Exception(err)
         return_dict["audit_list"] = al
-        return django.shortcuts.render_to_response('view_audit_trail.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_audit_trail.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Audit trail'
         return_dict['tab'] = 'view_logs_tab'
         return_dict["error"] = 'Error loading audit trail'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 
@@ -52,14 +52,14 @@ def view_hardware_logs(request):
             logs_dict, err = dell.get_alert_logs()
             if logs_dict:
                 return_dict['logs_dict'] = logs_dict
-        return django.shortcuts.render_to_response('view_hardware_logs.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_hardware_logs.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'View and download logs'
         return_dict['tab'] = 'logs_tab'
         return_dict["error"] = 'Error loading hardware logs'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def download_log(request):
@@ -172,14 +172,14 @@ def download_log(request):
 
         # either a get or an invalid form so send back form
         return_dict['form'] = form
-        return django.shortcuts.render_to_response('download_log_form.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'download_log_form.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "system_base.html"
         return_dict["page_title"] = 'Download system logs'
         return_dict['tab'] = 'logs_tab'
         return_dict["error"] = 'Error downloading system logs'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

@@ -21,14 +21,14 @@ def view_alerts(request):
             raise Exception(err)
         ret, err = alerts.update_last_view_time(request)
         return_dict['alerts_list'] = alerts_list
-        return django.shortcuts.render_to_response('view_alerts.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_alerts.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["page_title"] = 'System alerts'
         return_dict['tab'] = 'view_logs_tab'
         return_dict["error"] = 'Error loading system alerts'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def refresh_alerts(request, random=None):
@@ -60,14 +60,14 @@ def view_remote_monitoring_servers(request):
         if err:
             raise Exception(err)
         return_dict['servers'] = servers
-        return django.shortcuts.render_to_response("view_remote_monitoring_servers.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_remote_monitoring_servers.html", return_dict)
     except Exception as e:
         return_dict["page_title"] = 'Remote server monitoring'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error loading remote monitoring server list'
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def update_remote_monitoring_server(request):
@@ -113,14 +113,14 @@ def update_remote_monitoring_server(request):
                 return django.http.HttpResponseRedirect('/monitoring/view_remote_monitoring_servers?ack=updated')
             else:
                 # invalid form
-                return django.shortcuts.render_to_response("update_remote_monitoring_server.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "update_remote_monitoring_server.html", return_dict)
     except Exception as e:
         return_dict["page_title"] = 'Update remote server monitoring server'
         return_dict['tab'] = 'remote_monitoring_tab'
         return_dict["error"] = 'Error updating remote monitoring server'
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_remote_monitoring_server(request):
@@ -154,7 +154,7 @@ def delete_remote_monitoring_server(request):
         return_dict["error"] = 'Error removing remote monitoring server'
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_remote_monitoring_server_status(request):
@@ -171,7 +171,7 @@ def view_remote_monitoring_server_status(request):
             raise Exception(err)
         print(status)
         return_dict['status'] = status
-        return django.shortcuts.render_to_response("view_remote_monitoring_server_status.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_remote_monitoring_server_status.html", return_dict)
 
     except Exception as e:
         return_dict["page_title"] = 'View remote server monitoring server status'
@@ -179,7 +179,7 @@ def view_remote_monitoring_server_status(request):
         return_dict["error"] = 'Error viewing remote monitoring server status'
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def api_get_status(request):
@@ -263,14 +263,14 @@ def view_read_write_stats(request):
 
         if err:
             raise Exception(err)
-        return django.shortcuts.render_to_response('view_read_write_stats.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_read_write_stats.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["page_title"] = 'Monitoring'
         return_dict['tab'] = 'dir_manager_tab'
         return_dict["error"] = 'Error loading read and write stats'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 @login_required
 def view_dashboard(request, page = None):
@@ -541,11 +541,11 @@ def view_dashboard(request, page = None):
             template = "view_network_stats.html"
         return_dict["labels"] = time_list
         return_dict["data"] = value_list
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, template, return_dict)
     except Exception as e:
         return_dict['base_template'] = "monitoring_base.html"
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab

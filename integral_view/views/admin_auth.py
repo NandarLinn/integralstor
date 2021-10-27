@@ -69,11 +69,11 @@ def login(request):
 
         # For all other cases, return to login screen with return_dict
         # appropriately populated
-        return django.shortcuts.render_to_response('login_form.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'login_form.html', return_dict)
     except Exception as e:
         s = str(e)
         return_dict["error"] = "An error occurred when processing your request : %s" % s
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 def logout(request):
@@ -94,7 +94,7 @@ def logout(request):
         return_dict['tab'] = 'disks_tab'
         return_dict["error"] = 'Error logging out'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 def update_admin_password(request):
@@ -136,7 +136,7 @@ def update_admin_password(request):
                 form = admin_forms.ChangeAdminPasswordForm()
                 return_dict['form'] = form
 
-            return django.shortcuts.render_to_response('update_admin_password_form.html', return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render('update_admin_password_form.html', return_dict)
         else:
             # User not authenticated so return a login screen
             return django.http.HttpResponseRedirect('/login/')
@@ -146,7 +146,7 @@ def update_admin_password(request):
         return_dict['tab'] = 'system_info_tab'
         return_dict["error"] = 'Error changing administrator password'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response('logged_in_error.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'logged_in_error.html', return_dict)
 
 
 
