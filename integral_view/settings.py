@@ -105,6 +105,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'config/db/django.db'),
+    },
+    'integralstor': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'config/db/integralstor.db'),
+    },
+    'inotify': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'config/db/inotify.db'),
     }
 }
 

@@ -22,3 +22,28 @@ if OK , then ..
 cd integralstor/
 python3 manage.py migrate
 python3 manage.py runserver
+
+////
+
+Extra installation
+
+sudo apt install smartmontools
+sudo apt install zfsutils-linux
+
+zfs-pools
+----------
+sudo nano /etc/sudoers
+linn    ALL=(ALL)    NOPASSWD: ALL
+
+create zfs pool
+
+install samba
+------
+sudo apt install samba smbclient
+sudo smbpasswd -a kbuzdar
+https://linuxways.net/ubuntu/install-samba-on-ubuntu-20-04-and-share-files-on-linux-and-windows/
+
+
+
+/////
+
