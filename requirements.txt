@@ -1,4 +1,4 @@
-cron-descriptor
+cron-descriptor==1.2.24
 crontab==0.23.0
 Django==3.2.8
 ethtools==1.0.7
