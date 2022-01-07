@@ -22,14 +22,14 @@ def view_ssl_certificates(request):
             elif request.GET["ack"] == "uploaded_cert":
                 return_dict['ack_message'] = "A new SSL certificate has been successfully uploaded"
         return_dict["cert_list"] = cert_list
-        return django.shortcuts.render_to_response('view_ssl_certificates.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, 'view_ssl_certificates.html', return_dict)
     except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'SSL certificates'
         return_dict['tab'] = 'certificates_tab'
         return_dict["error"] = 'Error loading SSL certificates'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def delete_ssl_certificate(request):
@@ -46,7 +46,7 @@ def delete_ssl_certificate(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_ssl_certificate_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "delete_ssl_certificate_conf.html", return_dict)
         else:
 
             ret, err = pki.delete_ssl_certificate(name)
@@ -63,7 +63,7 @@ def delete_ssl_certificate(request):
         return_dict['tab'] = 'certificates_tab'
         return_dict["error"] = 'Error deleting SSL certificate'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def create_self_signed_ssl_certificate(request):
@@ -73,12 +73,12 @@ def create_self_signed_ssl_certificate(request):
             # Return the conf page
             form = keys_certs_forms.CreateSelfSignedCertForm()
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("create_self_signed_ssl_certificate.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "create_self_signed_ssl_certificate.html", return_dict)
         else:
             form = keys_certs_forms.CreateSelfSignedCertForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("create_self_signed_ssl_certificate.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "create_self_signed_ssl_certificate.html", return_dict)
             cd = form.cleaned_data
             ret, err = pki.generate_self_signed_ssl_certificate(cd)
             if err:
@@ -94,7 +94,7 @@ def create_self_signed_ssl_certificate(request):
         return_dict['tab'] = 'certificates_tab'
         return_dict["error"] = 'Error creating a self signed SSL certificate'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def upload_ssl_certificate(request):
@@ -104,12 +104,12 @@ def upload_ssl_certificate(request):
             # Return the conf page
             form = keys_certs_forms.UploadCertForm()
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("upload_ssl_certificate.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "upload_ssl_certificate.html", return_dict)
         else:
             form = keys_certs_forms.UploadCertForm(request.POST)
             return_dict['form'] = form
             if not form.is_valid():
-                return django.shortcuts.render_to_response("upload_ssl_certificate.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render(request, "upload_ssl_certificate.html", return_dict)
             cd = form.cleaned_data
             ret, err = pki.upload_ssl_certificate(cd)
             if err:
@@ -125,7 +125,7 @@ def upload_ssl_certificate(request):
         return_dict['tab'] = 'certificates_tab'
         return_dict["error"] = 'Error uploading a SSL certificate'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def upload_ssh_user_key(request):
@@ -166,14 +166,14 @@ def upload_ssh_user_key(request):
                 ack_message = "key_added"
             return django.http.HttpResponseRedirect("/keys_certs/view_user_ssh_keys/?ack=%s&user=%s" % (ack_message, user))
         elif request.method == 'GET':
-            return django.shortcuts.render_to_response("upload_ssh_user_key.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "upload_ssh_user_key.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Upload a Public Key'
         return_dict['tab'] = 'upload_public_key_tab'
         return_dict["error"] = 'Error adding Public key. Please check the value'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def upload_ssh_host_key(request):
@@ -221,14 +221,14 @@ def upload_ssh_host_key(request):
                 ack_message = "host_added"
             return django.http.HttpResponseRedirect("/keys_certs/view_known_hosts_ssh_keys/?ack=%s&user=%s" % (ack_message, user))
         elif request.method == 'GET':
-            return django.shortcuts.render_to_response("upload_ssh_host_key.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "upload_ssh_host_key.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Upload a Host Key'
         return_dict['tab'] = 'host_ssh_keys_tab'
         return_dict["error"] = 'Error adding host key. Please check the value'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_user_ssh_keys(request):
@@ -254,14 +254,14 @@ def view_user_ssh_keys(request):
             if request.GET["ack"] == "key_added":
                 return_dict['ack_message'] = "The Public Key has been successfully added"
 
-        return django.shortcuts.render_to_response("view_user_ssh_keys.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_user_ssh_keys.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'User SSH keys'
         return_dict['tab'] = 'user_ssh_keys_tab'
         return_dict["error"] = 'Error fetching public keys'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 def view_known_hosts_ssh_keys(request):
@@ -286,14 +286,14 @@ def view_known_hosts_ssh_keys(request):
             if request.GET["ack"] == "host_added":
                 return_dict['ack_message'] = "The Host Key has been successfully added"
 
-        return django.shortcuts.render_to_response("view_known_hosts_ssh_keys.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_known_hosts_ssh_keys.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "keys_certs_base.html"
         return_dict["page_title"] = 'Known hosts SSH fingerprint'
         return_dict['tab'] = 'host_ssh_keys_tab'
         return_dict["error"] = 'Error fetching known hosts SSH fingerprints'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab
