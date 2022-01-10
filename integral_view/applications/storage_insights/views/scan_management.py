@@ -45,14 +45,14 @@ def view_scans(request):
         return_dict['form'] = form
 
         return_dict['scans'] = scans
-        return django.shortcuts.render_to_response('view_scans.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render('view_scans.html', return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'View scans'
         return_dict['tab'] = 'view_scans_tab'
         return_dict["error"] = 'Error loading Storage Insight scans'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def delete_scan(request):
     return_dict = {}
@@ -72,7 +72,7 @@ def delete_scan(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_scan_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("delete_scan_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             ret, err = scan_utils.delete_scan(scan_id)
             if err:
@@ -87,7 +87,7 @@ def delete_scan(request):
         return_dict['tab'] = 'view_scans_tab'
         return_dict["error"] = 'Error loading Storage Insight scans'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def view_scan_configurations(request):
@@ -117,14 +117,14 @@ def view_scan_configurations(request):
                     if ct_list:
                         c['schedule_description'] = ct_list[0]['schedule_description']
         return_dict['configurations'] = configurations
-        return django.shortcuts.render_to_response('view_scan_configurations.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render('view_scan_configurations.html', return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'View scan configurations'
         return_dict['tab'] = 'scan_configurations_tab'
         return_dict["error"] = 'Error loading Storage Insight scan configurations'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def create_scan_configuration(request):
     return_dict = {}
@@ -159,7 +159,7 @@ def create_scan_configuration(request):
             form = storage_insights_forms.ScanConfigurationForm(
                 dataset_list=ds_list, initial=initial)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response("create_scan_configuration.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("create_scan_configuration.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             # Form submission so create
             form = storage_insights_forms.ScanConfigurationForm(
@@ -173,7 +173,7 @@ def create_scan_configuration(request):
                 if err:
                     raise Exception(err)
             else:
-                return django.shortcuts.render_to_response("create_scan_configuration.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("create_scan_configuration.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
             audit_str = 'Application Storage Insights scan configuration created for scanning directory "%s"' % cd['path']
             if cd['exclude_dirs']:
@@ -192,7 +192,7 @@ def create_scan_configuration(request):
         return_dict['tab'] = 'scan_configurations_tab'
         return_dict["error"] = 'Error creating Storage Insight folder scan configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def delete_scan_configuration(request):
 
@@ -220,7 +220,7 @@ def delete_scan_configuration(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_scan_configuration_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("delete_scan_configuration_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             ret, err = scan_utils.delete_scan_configuration(configurations[0], type=type)
             if err:
@@ -235,7 +235,7 @@ def delete_scan_configuration(request):
         return_dict['tab'] = 'scan_configurations_tab'
         return_dict["error"] = 'Error removing Storage Insight folder scan configuration'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def update_scan_schedule(request):
     return_dict = {}
@@ -256,7 +256,7 @@ def update_scan_schedule(request):
             # Return the conf page
             return_dict['configuration'] = configurations[0]
             return_dict['scan_configuration_id'] = req_ret['scan_configuration_id']
-            return django.shortcuts.render_to_response("schedule_scan.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("schedule_scan.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             if 'scheduler' not in req_ret:
                 raise Exception("Invalid request, please use the menus.")
@@ -278,7 +278,7 @@ def update_scan_schedule(request):
         return_dict['tab'] = 'scan_configurations_tab'
         return_dict["error"] = 'Error scheduling Storage Insight folder scan'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def delete_scan_schedule(request):
 
@@ -308,7 +308,7 @@ def delete_scan_schedule(request):
 
         if request.method == "GET":
             # Return the conf page
-            return django.shortcuts.render_to_response("delete_scan_schedule_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("delete_scan_schedule_conf.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             cron_description = cron_task_list[0]['description'].lower()
 
@@ -325,4 +325,4 @@ def delete_scan_schedule(request):
         return_dict['tab'] = 'scan_schedule_tab'
         return_dict["error"] = 'Error removing Storage Insight folder scan schedule'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
