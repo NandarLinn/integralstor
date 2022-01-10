@@ -30,7 +30,7 @@ def view_query_types(request):
 
             form = storage_insights_forms.ViewQueryTypesForm(configurations = configurations, query_types = query_types)
             return_dict["form"] = form
-            return django.shortcuts.render_to_response("view_query_types.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("view_query_types.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             # Form submission so create
             form = storage_insights_forms.ViewQueryTypesForm(request.POST, configurations = configurations, query_types = query_types)
@@ -50,7 +50,7 @@ def view_query_types(request):
                 #raise Exception('a')
                 return django.http.HttpResponseRedirect(url)
             else:
-                return django.shortcuts.render_to_response("view_query_types.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("view_query_types.html", return_dict, context_instance=django.template.context.RequestContext(request))
         query_type = None
         if 'query_type' in req_params and req_params['query_type']:
             query_type = req_params['query_type']
@@ -58,14 +58,14 @@ def view_query_types(request):
             if query_type not in query_types:
                 raise Exception('Unknown query type. Please use the menus')
         return_dict['query_types'] = query_types
-        return django.shortcuts.render_to_response('view_query_types.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render('view_query_types.html', return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Select Insight type '
         return_dict['tab'] = 'query_tab'
         return_dict["error"] = 'Error loading Storage Insight types'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def view_general_query_results(request):
@@ -105,7 +105,7 @@ def view_general_query_results(request):
         template = 'view_%s_results.html'%query_type
         return_dict['results'] = results
         return_dict['scan_configuration_id'] = scan_configuration_id
-        return django.shortcuts.render_to_response(template, return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(template, return_dict, context_instance=django.template.context.RequestContext(request))
 
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
@@ -113,7 +113,7 @@ def view_general_query_results(request):
         return_dict['tab'] = 'query_tab'
         return_dict["error"] = 'Error loading Storage Insight query result '
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def view_files_by_extension(request):
     return_dict = {}
@@ -136,7 +136,7 @@ def view_files_by_extension(request):
             form = storage_insights_forms.GetFilesByExtensionForm(initial={'scan_configuration_id': scan_configuration_id}, extensions = extensions)
             return_dict["form"] = form
             return_dict["scan_dir"] = configurations[0]['scan_dir']
-            return django.shortcuts.render_to_response("files_by_extension_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("files_by_extension_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             # Form submission so create
             form = storage_insights_forms.GetFilesByExtensionForm(request.POST, initial={'scan_configuration_id': scan_configuration_id}, extensions = extensions)
@@ -147,9 +147,9 @@ def view_files_by_extension(request):
                 if err:
                     raise Exception(err)
                 return_dict['results'] = results
-                return django.shortcuts.render_to_response("view_files_by_extension_results.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("view_files_by_extension_results.html", return_dict, context_instance=django.template.context.RequestContext(request))
             else:
-                return django.shortcuts.render_to_response("files_by_extension_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("files_by_extension_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
@@ -157,7 +157,7 @@ def view_files_by_extension(request):
         return_dict['tab'] = 'query_tab'
         return_dict["error"] = 'Error loading Storage Insight information - files by extension'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def find_files(request):
     return_dict = {}
@@ -177,7 +177,7 @@ def find_files(request):
             form = storage_insights_forms.FindFilesForm(initial={'scan_configuration_id': scan_configuration_id})
             return_dict["form"] = form
             return_dict["scan_dir"] = configurations[0]['scan_dir']
-            return django.shortcuts.render_to_response("find_files_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render("find_files_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             # Form submission so create
             form = storage_insights_forms.FindFilesForm(request.POST, initial={'scan_configuration_id': scan_configuration_id})
@@ -188,9 +188,9 @@ def find_files(request):
                 if err:
                     raise Exception(err)
                 return_dict['results'] = results
-                return django.shortcuts.render_to_response("view_find_files_results.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("view_find_files_results.html", return_dict, context_instance=django.template.context.RequestContext(request))
             else:
-                return django.shortcuts.render_to_response("find_files_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
+                return django.shortcuts.render("find_files_form.html", return_dict, context_instance=django.template.context.RequestContext(request))
         
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
@@ -198,7 +198,7 @@ def find_files(request):
         return_dict['tab'] = 'query_tab'
         return_dict["error"] = 'Error loading Storage Insight information - find files'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def download_file(request):
     return_dict = {}
@@ -239,7 +239,7 @@ def download_file(request):
         return_dict['tab'] = 'query_tab'
         return_dict["error"] = 'Error downloading file'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def view_dashboard(request):
     return_dict = {}
@@ -321,11 +321,11 @@ def view_dashboard(request):
         return_dict['num_deleted_configurations'] = num_deleted_configurations
         return_dict['num_active_configurations'] = num_active_configurations
         return_dict['num_configurations'] = num_configurations
-        return django.shortcuts.render_to_response('view_storage_insights_dashboard.html', return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render('view_storage_insights_dashboard.html', return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "storage_insights_base.html"
         return_dict["page_title"] = 'Storage Insights dashboard'
         return_dict['tab'] = 'dashboard_tab'
         return_dict["error"] = 'Error loading Storage Insight dashboard'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
