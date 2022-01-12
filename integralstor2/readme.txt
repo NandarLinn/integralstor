@@ -1,22 +1,22 @@
-OLD ZIP FILE IS PLACED AS /opt/integralstor/integralstor
+OLD ZIP FILE IS PLACED AS /opt/integralstor/integralstor2
 
 git clone ..../integralstor.git
 
 ## change in integralstor/site-packages/config.py
 change current running path
 # in get_branding_root function
-change /opt/integralstor/integralstor/....... to /opt/integralstor/integralstor2
+change /opt/integralstor/integralstor2/....... to /opt/integralstor/integralstor22
 
 #in integralstor/integral_view/wsgi.py
 sys.path.append('/var/integralstor/integralstor') to sys.path.append('/var/integralstor/integralstor2')
 
 
-sudo cp -r integralstor/ /opt/integralstor/integralstor2
+sudo cp -r integralstor/ /opt/integralstor/integralstor22
 sudo cp -r integralstor/site-packages/integralstor /usr/local/lib/python3.8/dist-packages/
 
-sudo chmod -R 777 /opt/integralstor/integralstor2
+sudo chmod -R 777 /opt/integralstor/integralstor22
 
-python3 /opt/integralstor/integralstor2/manage.py runserver 0.0.0.0:8000
+python3 /opt/integralstor/integralstor22/manage.py runserver 0.0.0.0:8000
 
 ////////////
 

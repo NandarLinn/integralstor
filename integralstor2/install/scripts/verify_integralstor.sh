@@ -63,7 +63,7 @@ sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-e
 sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 # Check and move integralstor site-packages to /usr/lib/python3.8/site-packages/
-LIB_PATH="/usr/local/lib/python3.8/site-packages/integralstor"
+LIB_PATH="/usr/local/lib/python3.8/dist-packages/integralstor"
 
 echo "Checking if integralstor site-packages are in place.."
 
@@ -71,7 +71,7 @@ if [ -e $LIB_PATH ];then
 	echo "Checked - OK"
 else
         echo "$LIB_PATH not in place, creating symlink.."
-	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/site-packages/integralstor
+	ln -s /opt/integralstor/integralstor2/site-packages/integralstor $LIB_PATH
 fi
 
 # Add nfs-local user and group if not present
@@ -98,7 +98,7 @@ fi
 
 echo "Checking if necessary integralstor specific directories are present.."
 
-dirs="/var/log/integralstor/logs /var/log/integralstor/logs/scripts /var/log/integralstor/logs/tasks /var/log/integralstor/logs/cron /var/log/integralstor/logs/exported /var/log/integralstor/archives /var/log/integralstor/archives/config /var/log/integralstor/archives/logs /var/log/integralstor/reports /var/log/integralstor/reports/urbackup /var/log/integralstor/reports/integralstor_status /var/log/integralstor/reports/remote-replication /opt/integralstor/integralstor/config /opt/integralstor/integralstor/config/db /opt/integralstor/integralstor/config/status /opt/integralstor/integralstor/config/pki /opt/integralstor/integralstor/config/conf_files /opt/integralstor/integralstor/config/run /opt/integralstor/integralstor/config/run/tasks /opt/integralstor/integralstor/config/run/tasks/foo"
+dirs="/var/log/integralstor/logs /var/log/integralstor/logs/scripts /var/log/integralstor/logs/tasks /var/log/integralstor/logs/cron /var/log/integralstor/logs/exported /var/log/integralstor/archives /var/log/integralstor/archives/config /var/log/integralstor/archives/logs /var/log/integralstor/reports /var/log/integralstor/reports/urbackup /var/log/integralstor/reports/integralstor_status /var/log/integralstor/reports/remote-replication /opt/integralstor/integralstor2/config /opt/integralstor/integralstor2/config/db /opt/integralstor/integralstor2/config/status /opt/integralstor/integralstor2/config/pki /opt/integralstor/integralstor2/config/conf_files /opt/integralstor/integralstor2/config/run /opt/integralstor/integralstor2/config/run/tasks /opt/integralstor/integralstor2/config/run/tasks/foo"
 
 for dir in $dirs
 do
@@ -113,9 +113,9 @@ done
 echo "Re-enforcing permissions.."
 
 chmod -R 777 /var/log/integralstor
-chmod -R 755 /opt/integralstor/integralstor/scripts/python/*
-chmod -R 755 /opt/integralstor/integralstor/scripts/shell/*
-chmod -R 775 /opt/integralstor/integralstor/config/run
+chmod -R 755 /opt/integralstor/integralstor2/scripts/python/*
+chmod -R 755 /opt/integralstor/integralstor2/scripts/shell/*
+chmod -R 775 /opt/integralstor/integralstor2/config/run
 chown -R nagios:nagios /usr/local/nagios &> /dev/null
 
 # Create empty log files if they're not present
@@ -135,16 +135,16 @@ echo "Checking hardware vendor.."
 
 # Check for platform file, set hardware_vendor to dell if using dell hardware, leave it empty if not.
 
-if [ ! -e /opt/integralstor/integralstor/platform ]; then
+if [ ! -e /opt/integralstor/integralstor2/platform ]; then
 	echo "platform file not present, generating.."
 	hardware_vendor=$(cat /sys/class/dmi/id/chassis_vendor)
 	if [ -z "$hardware_vendor" ]; then
  		 echo
 	else
-		sed -i /hardware_vendor/d /opt/integralstor/integralstor/platform
-		printf ' "hardware_vendor":"%s"}\n' "$hardware_vendor" >> /opt/integralstor/integralstor/platform
+		sed -i /hardware_vendor/d /opt/integralstor/integralstor2/platform
+		printf ' "hardware_vendor":"%s"}\n' "$hardware_vendor" >> /opt/integralstor/integralstor2/platform
 	fi
-	ln -s /opt/integralstor/integralstor/platform /opt/integralstor > /dev/null 2>&1
+	ln -s /opt/integralstor/integralstor2/platform /opt/integralstor > /dev/null 2>&1
 else
 	echo "Checked - Ok"
 fi
@@ -169,14 +169,14 @@ db_files="django.db inotify.db integralstor_db.schema integralstor.db"
 
 for db_file in $db_files;
 do
-	if [ ! -e /opt/integralstor/integralstor/config/db/$db_file ] && [ $db_file == 'integralstor.db' ];then
+	if [ ! -e /opt/integralstor/integralstor2/config/db/$db_file ] && [ $db_file == 'integralstor.db' ];then
 		echo "integralstor.db missing, creating it now.."
-		sqlite3 /opt/integralstor/integralstor/config/db/integralstor.db < /opt/integralstor/integralstor/install/conf-files/db/integralstor_db.schema
+		sqlite3 /opt/integralstor/integralstor2/config/db/integralstor.db < /opt/integralstor/integralstor2/install/conf-files/db/integralstor_db.schema
 	fi
 
-	if [ ! -e /opt/integralstor/integralstor/config/db/$db_file ];then
+	if [ ! -e /opt/integralstor/integralstor2/config/db/$db_file ];then
 		echo "$db_file is missing, copying it now.."
-		cp /opt/integralstor/integralstor/install/conf-files/db/$db_file /opt/integralstor/integralstor/config/db/
+		cp /opt/integralstor/integralstor2/install/conf-files/db/$db_file /opt/integralstor/integralstor2/config/db/
 	else
 		echo "$db_file - Exists"
 	fi	
@@ -188,7 +188,7 @@ echo "Checking cron entry.. "
 
 if [ $(crontab -l | wc -l) -lt 30  ]; then
         echo "Updating cron entries.."
-        cat /opt/integralstor/integralstor/install/scripts/cron_entries.list | crontab -
+        cat /opt/integralstor/integralstor2/install/scripts/cron_entries.list | crontab -
 else
         echo "Checked - OK"
  fi
@@ -205,7 +205,7 @@ fi
 
 # Verify configure_services.sh
 
-base_dir="/opt/integralstor/integralstor"
+base_dir="/opt/integralstor/integralstor2"
 install_dir="$base_dir/install"         
 conf_dir="$install_dir/conf-files"     
 services_dir="$conf_dir/services"     
