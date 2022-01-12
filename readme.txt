@@ -1,3 +1,5 @@
+OLD ZIP FILE IS PLACED AS /opt/integralstor/integralstor
+
 git clone ..../integralstor.git
 
 ## change in integralstor/site-packages/config.py
