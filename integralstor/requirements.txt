@@ -1,0 +1,13 @@
+cron-descriptor
+crontab
+Django
+ethtools
+ipaddr
+netifaces
+Pillow
+psutil
+psycopg2-binary
+PyMySQL
+pytz
+reportlab
+sysstat

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{%block content%}
+  <style>
+    body {
+      background : rgb(210,214,222);
+    }
+  </style>
+  <div class="row margin-top-80">
+    <div class="col-md-offset-3 col-md-6 col-sm-offset-3 sol-sm-6 col-xs-12">
+      <div class="loginbox">
+        <div class="login-logo">
+          &nbsp;
+        </div>
+        {%if session_active%}
+          <div class="callout callout-danger">
+            <h5>Another user is currently logged in !</h5>
+            <p>You are seeing this message, because another user is already logged in to the application. </p>
+
+            <p> If you choose to continue and login and make changes to the system, your changes may be overridden by the other user or vice-versa.</p>
+          </div>
+        {%endif%}
+        <div class="login-box-body" style="text-align:center;vertical-align:middle">
+          <form role="form" action="." method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <div class="form-group has-feedback">
+                <input type="text"  name="username" class="form-control" id="id_username" placeholder="Username" required autofocus> 
+                <span class="fa fa-user form-control-feedback"></span>
+                {{ form.username.errors }}
+              </div>
+            </div>
+            <div class="form-group has-feedback">
+              <input type="password"  name="password" class="form-control" id="id_password" placeholder="Password" required>
+              <span class="fa fa-cog form-control-feedback"></span>
+              {{ form.password.errors }}
+            </div>
+            <div class="box-footer">
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary cover-page"><i class="fa fa-sign-in fa-fw "></i>&nbsp;<strong>Login</strong></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if invalidUser %}
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-12">
+        <p class="alert alert-danger"><strong> Invalid User or Password. Please try again</strong></p>
+      </div>
+    </div>
+  {% endif %}
+
+{%endblock%}

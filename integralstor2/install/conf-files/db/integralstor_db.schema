@@ -1,0 +1,297 @@
+CREATE TABLE "email_config" (
+  "id" integer NOT NULL PRIMARY KEY,
+  "server" varchar(40) NOT NULL,
+  "port" integer NOT NULL,
+  "username" varchar(40) NOT NULL,
+  "pswd" varchar(40) NOT NULL,
+  "tls" bool NOT NULL,
+  "support_email_addresses" varchar(200) default "support@fractalio.com");
+
+CREATE TABLE "samba_shares" (
+  share_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  vol varchar(40) NOT NULL,
+  path varchar(100) NOT NULL,
+  display_path varchar(140) NOT NULL,
+  comment varchar(100),
+  read_only bool not null,
+  guest_ok bool not null,
+  browseable bool not null,
+  hosts_allow varchar2(200), 
+  hosts_deny varchar2(200)
+);
+
+CREATE TABLE "global_params" (
+  id INTEGER NOT NULL PRIMARY KEY,
+  logging_level INTEGER NOT NULL
+);
+
+CREATE TABLE "samba_global_ad" (
+  "id" INTEGER NOT NULL PRIMARY KEY,
+  "realm" VARCHAR(60) NOT NULL,
+  "password_server" VARCHAR(60) NOT NULL,
+  "ad_schema_mode" VARCHAR(60) NOT NULL,
+  "id_map_min" INTEGER NOT NULL,
+  "id_map_max" INTEGER NOT NULL,
+  "password_server_ip" VARCHAR(60) NOT NULL default "0.0.0.0");
+
+CREATE TABLE "samba_global_common" (
+  "id" INTEGER NOT NULL PRIMARY KEY,
+  "security" VARCHAR(60) NOT NULL,
+  "workgroup" VARCHAR(60) NOT NULL,
+  "netbios_name" VARCHAR(60) NOT NULL,
+  "include_homes_section" BOOL NOT NULL
+);
+
+CREATE TABLE "admin_alerts" (
+  user varchar(60) NOT NULL PRIMARY KEY,
+  last_refresh_time DATETIME NOT NULL
+);
+
+CREATE TABLE "rsync_shares" (
+  "share_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "name" varchar(200) NOT NULL,
+  "path" varchar(200) NOT NULL,
+  "comment" varchar(200) NOT NULL,
+  "list" boolean NOT NULL DEFAULT 'yes',
+  "readonly" boolean NOT NULL DEFAULT 'no',
+  "uid" varchar(200) NOT NULL,
+  "gid" varchar(200) NOT NULL
+);
+
+CREATE TABLE "tasks" (
+  "task_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(200) NOT NULL,
+  "task_type_id" integer NOT NULL,
+  "node" varchar(200) NOT NULL,
+  "run_as_user_name" VARCHAR(100) NOT NULL DEFAULT 'root',
+  "attempts" integer NOT NULL,
+  "cron_task_id" integer NOT NULL,
+  "retry_interval" integer NOT NULL DEFAULT 1,
+  "create_time" datetime NOT NULL,
+  "initiate_time" datetime NOT NULL,
+  "last_run_time" datetime,
+  "end_time" datetime,
+  "status" varchar(50) NOT NULL DEFAULT 'queued',
+  FOREIGN KEY(task_type_id) REFERENCES reference_task_types(id)
+);
+
+CREATE TABLE "subtasks" (
+  "subtask_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(100) NOT NULL,
+  "command"  varchar(400) NOT NULL,
+  "task_id" integer NOT NULL,
+  "status" varchar(100) NOT NULL DEFAULT 'queued',
+  "return_code" varchar(10),
+  FOREIGN KEY(task_id) REFERENCES tasks(task_id) ON DELETE CASCADE
+);
+
+CREATE TABLE "reference_task_types" (
+  "id" integer NOT NULL PRIMARY KEY,
+  "description" varchar(200) NOT NULL
+);
+
+insert into reference_task_types (id, description) values (0, 'Unspecified');
+insert into reference_task_types (id, description) values (1, 'Disk replacement');
+insert into reference_task_types (id, description) values (2, 'Service restart');
+insert into reference_task_types (id, description) values (3, 'ZFS scrub');
+insert into reference_task_types (id, description) values (4, 'Remote replication');
+insert into reference_task_types (id, description) values (5, 'Event notification');
+insert into reference_task_types (id, description) values (6, 'Application task');
+
+CREATE TABLE "cron_tasks" (
+  "cron_task_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "task_type_id" integer NOT NULL DEFAULT 0,
+  "description" varchar(200) NOT NULL,
+  "command" varchar(200) NOT NULL
+);
+INSERT INTO cron_tasks (cron_task_id, description, command) values (-1, 'Dummy entry for temporary reference', 'echo');
+
+CREATE TABLE "zfs_cron_tasks" (
+  "zfs_cron_task_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "cron_task_id" integer NOT NULL REFERENCES cron_tasks(cron_task_id) ON DELETE CASCADE,
+  "pool_name" varchar(100) NOT NULL,
+  "ds_zvol_name" varchar(100)
+);
+
+CREATE TABLE "remote_replications" (
+  "remote_replication_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "mode" varchar(20) NOT NULL,
+  "cron_task_id" integer NOT NULL REFERENCES cron_tasks(cron_task_id) ON DELETE CASCADE,
+  "pause_cron_task_id" integer NOT NULL DEFAULT -1 REFERENCES cron_tasks(cron_task_id),
+  "is_one_shot" boolean DEFAULT 'False',
+  "user_comment" varchar(200) DEFAULT "N.A"
+);
+
+
+CREATE TABLE "zfs_replications" (
+  "zfs_replication_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "source_dataset" varchar(100) NOT NULL,
+  "target_pool" varchar(100) NOT NULL,
+  "target_ip" varchar(30) NOT NULL,
+  "target_user_name" varchar(100) NOT NULL,
+  "remote_replication_id" integer NOT NULL REFERENCES remote_replications(remote_replication_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE "rsync_replications" (
+  "rsync_replication_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "rsync_type" varchar(10) NOT NULL,
+  "short_switches" varchar(200),
+  "long_switches" varchar(100),
+  "source_path" varchar(200) NOT NULL,
+  "target_path" varchar(200) NOT NULL,
+  "target_ip" varchar(30) NOT NULL,
+  "is_between_integralstor" boolean DEFAULT 'False',
+  "target_user_name" varchar(100) NOT NULL,
+  "remote_replication_id" integer NOT NULL REFERENCES remote_replications(remote_replication_id) ON DELETE CASCADE
+);
+
+CREATE TABLE "audit" (
+  "audit_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "audit_time" datetime NOT NULL,
+  "username" varchar(100) NOT NULL,
+  "source_ip" varchar(100) NOT NULL,
+  "audit_code" varchar(100) NOT NULL,
+  "audit_str" varchar(150) NOT NULL
+);
+
+CREATE TABLE "reference_event_types" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(100) NOT NULL
+);
+
+INSERT INTO reference_event_types (id, description) values (1, 'Alerts');
+INSERT INTO reference_event_types (id, description) values (2, 'Audits');
+INSERT INTO reference_event_types (id, description) values (3, 'Reports');
+
+CREATE TABLE "reference_event_subtypes" (
+  "event_type_id" integer NOT NULL,
+  "event_subtype_id" integer NOT NULL,
+  "description" varchar(100) NOT NULL,
+  FOREIGN KEY(event_type_id) REFERENCES reference_event_types(id),
+  UNIQUE(event_type_id, event_subtype_id)
+);
+
+INSERT INTO reference_event_subtypes (event_type_id, event_subtype_id, description) values (1, -1, 'Alerts');
+INSERT INTO reference_event_subtypes (event_type_id, event_subtype_id, description) values (2, -1, 'Audits');
+INSERT INTO reference_event_subtypes (event_type_id, event_subtype_id, description) values (3, 1, 'System status report');
+INSERT INTO reference_event_subtypes (event_type_id, event_subtype_id, description) values (3, 2, 'URbackup report');
+INSERT INTO reference_event_subtypes (event_type_id, event_subtype_id, description) values (3, 3, 'Remote replication report');
+
+CREATE TABLE "reference_notification_types" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(100) NOT NULL
+);
+
+INSERT INTO reference_notification_types (id, description) values (1, 'Email');
+
+CREATE TABLE "reference_severity_types" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(100) NOT NULL
+);
+
+INSERT INTO reference_severity_types (id, description) values (-1, 'Not applicable');
+INSERT INTO reference_severity_types (id, description) values (0, 'All');
+INSERT INTO reference_severity_types (id, description) values (1, 'Info');
+INSERT INTO reference_severity_types (id, description) values (2, 'Warning');
+INSERT INTO reference_severity_types (id, description) values (3, 'Critical');
+
+CREATE TABLE "reference_subsystem_types" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "description" varchar(100) NOT NULL
+);
+
+INSERT INTO reference_subsystem_types (id, description) values (-1, 'Not applicable');
+INSERT INTO reference_subsystem_types (id, description) values (0, 'All');
+INSERT INTO reference_subsystem_types (id, description) values (1, 'Disks');
+INSERT INTO reference_subsystem_types (id, description) values (2, 'Services');
+INSERT INTO reference_subsystem_types (id, description) values (3, 'Networking');
+INSERT INTO reference_subsystem_types (id, description) values (4, 'CPU');
+INSERT INTO reference_subsystem_types (id, description) values (5, 'Other hardware components');
+INSERT INTO reference_subsystem_types (id, description) values (6, 'ZFS');
+INSERT INTO reference_subsystem_types (id, description) values (7, 'Background tasks');
+INSERT INTO reference_subsystem_types (id, description) values (8, 'Operating system');
+
+CREATE TABLE "alerts" (
+  "alert_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "first_alert_time" datetime NOT NULL,
+  "last_update_time" datetime NOT NULL,
+  "severity_type_id" integer NOT NULL,
+  "subsystem_type_id" integer NOT NULL,
+  "component" varchar(100),
+  "repeat_count" integer NOT NULL DEFAULT 1,
+  "alert_str" varchar(300) NOT NULL,
+  FOREIGN KEY(severity_type_id) REFERENCES reference_severity_types(id),
+  FOREIGN KEY(subsystem_type_id) REFERENCES reference_subsystem_types(id)
+);
+
+CREATE TABLE "event_notification_triggers" (
+  "ent_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "event_type_id" integer NOT NULL,
+  "event_subtype_id" integer NOT NULL DEFAULT -1,
+  "subsystem_type_id" integer NOT NULL DEFAULT -1,
+  "severity_type_id" integer NOT NULL DEFAULT -1,
+  "notification_type_id" integer NOT NULL,
+  "enc_id" integer NOT NULL,
+  "superadmin_only" bool NOT NULL default 0,
+  "cron_task_id" integer NOT NULL,
+  FOREIGN KEY(event_type_id) REFERENCES reference_event_types(id),
+  FOREIGN KEY(event_type_id, event_subtype_id) REFERENCES reference_event_subtypes(event_type_id, event_subtype_id),
+  FOREIGN KEY(subsystem_type_id) REFERENCES reference_subsystem_types(id),
+  FOREIGN KEY(severity_type_id) REFERENCES reference_severity_types(id),
+  FOREIGN KEY(notification_type_id) REFERENCES reference_notification_types(id),
+  FOREIGN KEY(cron_task_id) REFERENCES cron_tasks(cron_task_id)
+);
+
+CREATE TABLE "event_notifications_holding" (
+  "enh_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "event_id" integer NOT NULL,
+  "ent_id" integer NOT NULL,
+  "status" integer NOT NULL,
+  FOREIGN KEY(ent_id) REFERENCES event_notification_triggers(ent_id)
+);
+
+
+CREATE TABLE "event_notification_configuration_email" (
+  "enc_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "recipient_list" varchar(200) NOT NULL
+);
+
+
+CREATE TABLE "email_queue" (
+  "eq_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "recipients" varchar(200) NOT NULL,
+  "subject" varchar(100) NOT NULL,
+  "body" varchar(2000) NOT NULL,
+  "attachment_file_location" varchar(100),
+  "delete_attachment_file" boolean DEFAULT FALSE,
+  "create_time" datetime NOT NULL,
+  "last_attempt_time" datetime,
+  "status" INTEGER NOT NULL,
+  "attempts" INTEGER NOT NULL DEFAULT 0,
+  "error_message" varchar(300)
+);
+
+CREATE TABLE "pool_usage_stats" (
+  "pool_name" VARCHAR(100) NOT NULL,
+  "date" DATETIME NOT NULL,
+  "used_bytes" INTEGER NOT NULL,
+  "available_bytes" INTEGER NOT NULL,
+  unique(pool_name, date)
+);
+
+
+CREATE TABLE "org_info" (
+  "org_name" VARCHAR(100) NOT NULL DEFAULT "N.A",
+  "unit_name" VARCHAR(100) NOT NULL DEFAULT "N.A",
+  "unit_id" VARCHAR(100) NOT NULL DEFAULT "N.A",
+  "subunit_name" VARCHAR(100) NOT NULL DEFAULT "N.A",
+  "subunit_id" VARCHAR(100) NOT NULL DEFAULT "N.A"
+);
+
+
+CREATE TABLE "integralstor_info" (
+  "uuid_hex" VARCHAR(32) NOT NULL PRIMARY KEY,
+  "uuid_str" VARCHAR(36) NOT NULL
+);
