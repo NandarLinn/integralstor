@@ -3,6 +3,7 @@
 git clone ..../integralstor.git
 
 sudo rm -rf /opt/integralstor/integralstor
+
 sudo cp -r integralstor /opt/integralstor/
 
 /// Already Configured
@@ -16,6 +17,7 @@ sys.path.append('/var/integralstor/integralstor') to sys.path.append('/var/integ
 ///////
 
 sudo cp -r integralstor2/ /opt/integralstor/integralstor2
+
 sudo cp -r integralstor2/site-packages/integralstor /usr/local/lib/python3.8/dist-packages/
 
 sudo chmod -R 777 /opt/integralstor/integralstor2
