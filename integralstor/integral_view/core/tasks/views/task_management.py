@@ -25,14 +25,14 @@ def view_scheduled_tasks(request):
         return_dict["snapshot_schedules"] = snapshot_schedules
 
         return_dict["tasks"] = tasks
-        return django.shortcuts.render(request, "view_scheduled_tasks.html", return_dict)
+        return django.shortcuts.render_to_response("view_scheduled_tasks.html", return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Scheduled tasks'
         return_dict['tab'] = 'view_scheduled_tasks_tab'
         return_dict["error"] = 'Error retriving scheduled tasks'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 def update_scheduled_task_schedule(request):
     return_dict = {}
@@ -54,7 +54,7 @@ def update_scheduled_task_schedule(request):
         if request.method == "GET":
             # Return the conf page
             return_dict['schedule_description'] = cron_task_list[0]['schedule_description'].lower()
-            return django.shortcuts.render(request, "update_scheduled_task_schedule.html", return_dict)
+            return django.shortcuts.render_to_response("update_scheduled_task_schedule.html", return_dict, context_instance=django.template.context.RequestContext(request))
         else:
             scheduler = request.POST.get('scheduler')
             schedule = scheduler.split()
@@ -75,7 +75,7 @@ def update_scheduled_task_schedule(request):
         return_dict['tab'] = 'view_scheduled_tasks_tab'
         return_dict["error"] = 'Error modifying task schedule'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def view_background_tasks(request):
@@ -115,14 +115,14 @@ def view_background_tasks(request):
             task['end_time'] = end_time_str
 
         return_dict["tasks"] = tasks
-        return django.shortcuts.render(request, "view_background_tasks.html", return_dict)
+        return django.shortcuts.render_to_response("view_background_tasks.html", return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background tasks'
         return_dict['tab'] = 'view_background_tasks_tab'
         return_dict["error"] = 'Error retriving background tasks'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def delete_background_task(request):
@@ -152,7 +152,7 @@ def delete_background_task(request):
         return_dict['tab'] = 'view_background_tasks_tab'
         return_dict["error"] = 'Error removing background task'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def stop_background_task(request):
@@ -182,7 +182,7 @@ def stop_background_task(request):
         return_dict['tab'] = 'view_background_tasks_tab'
         return_dict["error"] = 'Error stopping background task'
         return_dict["error_details"] = str(e)
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 def view_task_details(request, task_id):
@@ -227,14 +227,14 @@ def view_task_details(request, task_id):
                 task_output = task_output + '\n'.join(last)
         return_dict['task_output'] = task_output
 
-        return django.shortcuts.render(request, "view_task_details.html", return_dict)
+        return django.shortcuts.render_to_response("view_task_details.html", return_dict, context_instance=django.template.context.RequestContext(request))
     except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background jobs'
         return_dict['tab'] = 'view_background_tasks_tab'
         return_dict["error"] = 'Error retriving background task details'
         return_dict["error_details"] = e
-        return django.shortcuts.render(request, "logged_in_error.html", return_dict)
+        return django.shortcuts.render_to_response("logged_in_error.html", return_dict, context_instance=django.template.context.RequestContext(request))
 
 
 # vim: tabstop=8 softtabstop=0 expandtab ai shiftwidth=4 smarttab
