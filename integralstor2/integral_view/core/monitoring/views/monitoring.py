@@ -92,7 +92,7 @@ def update_remote_monitoring_server(request):
                 return_dict['action'] = 'create'
             form = monitoring_forms.RemoteMonitoringServerForm(initial=initial)
             return_dict['form'] = form
-            return django.shortcuts.render_to_response("update_remote_monitoring_server.html", return_dict, context_instance=django.template.context.RequestContext(request))
+            return django.shortcuts.render(request, "update_remote_monitoring_server.html", return_dict)
         else:
             form = monitoring_forms.RemoteMonitoringServerForm(request.POST)
             return_dict["form"] = form
