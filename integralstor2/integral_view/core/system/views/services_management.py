@@ -29,7 +29,7 @@ def view_services(request):
                 return_dict['ack_message'] = 'Service status change initiated'
 
         return_dict["services"], err = services_management.get_sysd_services_status()
-        print('return_dict:', return_dict["services"])
+
         if err:
             raise Exception(err)
         return django.shortcuts.render(request, 'view_services.html', return_dict)
