@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/opt/integralstor/integralstor/scripts/shell/first_boot.sh
+ExecStart=/opt/integralstor/integralstor2/scripts/shell/first_boot.sh
 RemainAfterExit=false
 
 [Install]
