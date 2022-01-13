@@ -3,5 +3,5 @@ Description=Mount USB Drive on %i
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/opt/integralstor/integralstor/scripts/shell/usb-mount.sh add %i
-ExecStop=/opt/integralstor/integralstor/scripts/shell/usb-mount.sh remove %i
+ExecStart=/opt/integralstor/integralstor2/scripts/shell/usb-mount.sh add %i
+ExecStop=/opt/integralstor/integralstor2/scripts/shell/usb-mount.sh remove %i
