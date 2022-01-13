@@ -36,7 +36,7 @@ sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 
 # Link site-packages with python libraries dir
-ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/dist-packages/integralstor
+ln -s /opt/integralstor/integralstor2/site-packages/integralstor /usr/local/lib/python3.8/dist-packages/integralstor
 
 
 # To force NFS users to come in as nfsuser, create nfsuser
