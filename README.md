@@ -22,6 +22,7 @@ sudo pip3 uninstall crontab
 
 pip3 install python-crontab
 
+# //// Finished Crontab ///
 install packages
 cd integralstor/ 
 pip3 -r requiements.txt
