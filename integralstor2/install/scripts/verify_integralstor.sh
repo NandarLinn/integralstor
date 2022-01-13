@@ -63,7 +63,7 @@ sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-e
 sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 # Check and move integralstor site-packages to /usr/lib/python3.8/site-packages/
-LIB_PATH="/usr/local/lib/python3.8/site-packages/integralstor"
+LIB_PATH="/usr/local/lib/python3.8/dist-packages/integralstor"
 
 echo "Checking if integralstor site-packages are in place.."
 
@@ -71,7 +71,7 @@ if [ -e $LIB_PATH ];then
 	echo "Checked - OK"
 else
         echo "$LIB_PATH not in place, creating symlink.."
-	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/site-packages/integralstor
+	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/dist-packages/integralstor
 fi
 
 # Add nfs-local user and group if not present
