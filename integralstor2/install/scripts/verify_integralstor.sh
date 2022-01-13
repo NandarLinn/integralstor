@@ -71,7 +71,7 @@ if [ -e $LIB_PATH ];then
 	echo "Checked - OK"
 else
         echo "$LIB_PATH not in place, creating symlink.."
-	ln -s /opt/integralstor/integralstor/site-packages/integralstor $LIB_PATH
+	ln -s /opt/integralstor/integralstor2/site-packages/integralstor $LIB_PATH
 fi
 
 # Add nfs-local user and group if not present
