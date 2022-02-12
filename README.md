@@ -16,6 +16,13 @@ python3 /opt/integralstor/integralstor2/manage.py runserver 0.0.0.0:8000
 
 # //////////// Finished ///////
 
+# Crontab error
+
+sudo pip3 uninstall crontab
+
+pip3 install python-crontab
+
+# //// Finished Crontab ///
 install packages
 cd integralstor/ 
 pip3 -r requiements.txt

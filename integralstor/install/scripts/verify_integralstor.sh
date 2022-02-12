@@ -63,7 +63,7 @@ sed -i 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/network/interfaces.d/ifcfg-e
 sed -e '/requiretty/s/^/#/g' -i /etc/sudoers
 
 # Check and move integralstor site-packages to /usr/lib/python3.8/site-packages/
-LIB_PATH="/usr/local/lib/python3.8/site-packages/integralstor"
+LIB_PATH="/usr/local/lib/python3.8/dist-packages/integralstor"
 
 echo "Checking if integralstor site-packages are in place.."
 
@@ -71,13 +71,13 @@ if [ -e $LIB_PATH ];then
 	echo "Checked - OK"
 else
         echo "$LIB_PATH not in place, creating symlink.."
-	ln -s /opt/integralstor/integralstor/site-packages/integralstor /usr/local/lib/python3.8/site-packages/integralstor
+	ln -s /opt/integralstor/integralstor/site-packages/integralstor $LIB_PATH
 fi
 
 # Add nfs-local user and group if not present
 echo "Checking for nfs-local user and group"
-nfs_usr=`python -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
-nfs_grp=`python -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
+nfs_usr=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
+nfs_grp=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
 
 if id "$nfs_usr" > /dev/null 2>&1;then
         echo "nfs user - OK"

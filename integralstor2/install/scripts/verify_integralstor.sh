@@ -76,8 +76,8 @@ fi
 
 # Add nfs-local user and group if not present
 echo "Checking for nfs-local user and group"
-nfs_usr=`python -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
-nfs_grp=`python -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
+nfs_usr=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_user_name(); print name;"`
+nfs_grp=`python3 -c "from integralstor import config; name, err = config.get_local_nfs_group_name(); print name;"`
 
 if id "$nfs_usr" > /dev/null 2>&1;then
         echo "nfs user - OK"

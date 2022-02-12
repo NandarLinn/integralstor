@@ -115,7 +115,7 @@ def view_background_tasks(request):
             task['end_time'] = end_time_str
 
         return_dict["tasks"] = tasks
-        return django.shortcuts.render_to_response("view_background_tasks.html", return_dict, context_instance=django.template.context.RequestContext(request))
+        return django.shortcuts.render(request, "view_background_tasks.html", return_dict)
     except Exception as e:
         return_dict['base_template'] = "tasks_base.html"
         return_dict["page_title"] = 'Background tasks'
