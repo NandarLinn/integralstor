@@ -29,4 +29,4 @@ fi
 
 audit_str="ZFS has completed a ${action} on pool ${ZEVENT_POOL} at ${ZEVENT_TIME_STRING}."
 
-python3 /opt/integralstor/integralstor/scripts/python/record_audit.py ${audit_code} "${audit_str}"
+python3 /opt/integralstor/integralstor2/scripts/python/record_audit.py ${audit_code} "${audit_str}"

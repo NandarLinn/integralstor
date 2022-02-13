@@ -63,18 +63,18 @@ mkdir -p /var/log/integralstor/reports/urbackup/
 mkdir -p /var/log/integralstor/reports/integralstor_status/
 mkdir -p /var/log/integralstor/reports/remote-replication/
 
-mkdir -p /opt/integralstor/integralstor/config
-mkdir -p /opt/integralstor/integralstor/config/db
-mkdir -p /opt/integralstor/integralstor/config/status
-mkdir -p /opt/integralstor/integralstor/config/pki
-mkdir -p /opt/integralstor/integralstor/config/conf_files
-mkdir -p /opt/integralstor/integralstor/config/run
-mkdir -p /opt/integralstor/integralstor/config/run/tasks
+mkdir -p /opt/integralstor/integralstor2/config
+mkdir -p /opt/integralstor/integralstor2/config/db
+mkdir -p /opt/integralstor/integralstor2/config/status
+mkdir -p /opt/integralstor/integralstor2/config/pki
+mkdir -p /opt/integralstor/integralstor2/config/conf_files
+mkdir -p /opt/integralstor/integralstor2/config/run
+mkdir -p /opt/integralstor/integralstor2/config/run/tasks
 
 chmod -R 777 /var/log/integralstor
-chmod -R 755 /opt/integralstor/integralstor/scripts/python/*
-chmod -R 755 /opt/integralstor/integralstor/scripts/shell/*
-chmod -R 775 /opt/integralstor/integralstor/config/run
+chmod -R 755 /opt/integralstor/integralstor2/scripts/python/*
+chmod -R 755 /opt/integralstor/integralstor2/scripts/shell/*
+chmod -R 775 /opt/integralstor/integralstor2/config/run
 
 touch /var/log/integralstor/logs/scripts/scripts.log
 touch /var/log/integralstor/logs/scripts/integral_view.log
@@ -85,11 +85,11 @@ touch /var/log/integralstor/logs/scripts/ramdisks
 if [ -z "$hardware_vendor" ]; then
   echo
 else
-  sed -i /hardware_vendor/d /opt/integralstor/integralstor/platform
-  printf ' "hardware_vendor":"%s"}\n' "$hardware_vendor" >> /opt/integralstor/integralstor/platform
+  sed -i /hardware_vendor/d /opt/integralstor/integralstor2/platform
+  printf ' "hardware_vendor":"%s"}\n' "$hardware_vendor" >> /opt/integralstor/integralstor2/platform
 fi
 
-ln -s /opt/integralstor/integralstor/platform /opt/integralstor
+ln -s /opt/integralstor/integralstor2/platform /opt/integralstor
 
 
 # Anacron
@@ -103,15 +103,15 @@ chown -R nagios:nagios /usr/local/nagios &> /dev/null
 
 
 # Create Integralstor databases
-rm -rf /opt/integralstor/integralstor/config/db/*
-cp /opt/integralstor/integralstor/install/conf-files/db/*.db /opt/integralstor/integralstor/config/db/
-sqlite3 /opt/integralstor/integralstor/config/db/integralstor.db < /opt/integralstor/integralstor/install/conf-files/db/integralstor_db.schema
+rm -rf /opt/integralstor/integralstor2/config/db/*
+cp /opt/integralstor/integralstor2/install/conf-files/db/*.db /opt/integralstor/integralstor2/config/db/
+sqlite3 /opt/integralstor/integralstor2/config/db/integralstor.db < /opt/integralstor/integralstor2/install/conf-files/db/integralstor_db.schema
 
 
 # Populate cron entries
 # ALERT: clears existing entries
 crontab -r
-cat /opt/integralstor/integralstor/install/scripts/cron_entries.list | crontab -
+cat /opt/integralstor/integralstor2/install/scripts/cron_entries.list | crontab -
 
 
 # Disable printing kernel messages(dmesg) to console

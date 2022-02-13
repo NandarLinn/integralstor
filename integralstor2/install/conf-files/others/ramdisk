@@ -22,7 +22,7 @@
 BASE=ramdisk
 RETVAL=0
 LOCKFILE=/var/lock/subsys/${BASE}
-file=/opt/integralstor/integralstor/install/conf-files/services/ramdisks.conf
+file=/opt/integralstor/integralstor2/install/conf-files/services/ramdisks.conf
 start() {
 
 cat $file | while read line

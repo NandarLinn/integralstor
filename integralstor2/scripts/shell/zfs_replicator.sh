@@ -16,10 +16,10 @@ pgid=$(ps -o pgid= $$ | grep -o [0-9]*)
 pid=$(ps -o pid= $$ | grep -o [0-9]*)
 
 # store the process group id
-printf '%s' "$pgid" > /opt/integralstor/integralstor/config/run/tasks/rr."$rr_id".pgid
+printf '%s' "$pgid" > /opt/integralstor/integralstor2/config/run/tasks/rr."$rr_id".pgid
 
 # store the process id
-printf '%s' "$pid" > /opt/integralstor/integralstor/config/run/tasks/rr."$rr_id".pid
+printf '%s' "$pid" > /opt/integralstor/integralstor2/config/run/tasks/rr."$rr_id".pid
 
 source=$source_pool/$source_dataset
 #echo $source $destination
@@ -86,7 +86,7 @@ else
 fi
 
 # remove the process group id and pid files
-rm -f /opt/integralstor/integralstor/config/run/tasks/rr."$rr_id".pgid
-rm -f /opt/integralstor/integralstor/config/run/tasks/rr."$rr_id".pid
+rm -f /opt/integralstor/integralstor2/config/run/tasks/rr."$rr_id".pgid
+rm -f /opt/integralstor/integralstor2/config/run/tasks/rr."$rr_id".pid
 
 exit $exit_code

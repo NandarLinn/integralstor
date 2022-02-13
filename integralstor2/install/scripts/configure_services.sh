@@ -2,12 +2,12 @@
 
 # Place services and other configuration files appropriately
 
-base_dir="/opt/integralstor/integralstor"
-install_dir="$base_dir/install"         # /opt/integralstor/integralstor/install
-conf_dir="$install_dir/conf-files"      # /opt/integralstor/integralstor/install/conf-files
-services_dir="$conf_dir/services"       # /opt/integralstor/integralstor/install/conf-files/services
-db_dir="$conf_dir/db"                   # /opt/integralstor/integralstor/install/conf-files/db
-others_dir="$conf_dir/others"           # /opt/integralstor/integralstor/install/conf-files/others
+base_dir="/opt/integralstor/integralstor2"
+install_dir="$base_dir/install"         # /opt/integralstor/integralstor2/install
+conf_dir="$install_dir/conf-files"      # /opt/integralstor/integralstor2/install/conf-files
+services_dir="$conf_dir/services"       # /opt/integralstor/integralstor2/install/conf-files/services
+db_dir="$conf_dir/db"                   # /opt/integralstor/integralstor2/install/conf-files/db
+others_dir="$conf_dir/others"           # /opt/integralstor/integralstor2/install/conf-files/others
 
 #zed
 cp $install_dir/scripts/scrub_finish-integralstor.sh /etc/zfs/zed.d
